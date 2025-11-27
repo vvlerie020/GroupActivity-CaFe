@@ -9,7 +9,7 @@
      
     
 </head>
-<body> Fernandez lipat mo naman yuung javascrp ito ihighlight ko
+<body> 
     
         Conditional Statement
     </h1>
@@ -39,17 +39,46 @@
     </section> 
 
     
-      <!-- Example 3:odd or even --> pa help ako guys di ko ma figure out
+      <!-- Example 3:odd or even --> 
    <section class="Number"> 
     <h2>Odd or Even</h2> 
     <p>Put a number to know if it's odd or even.</p>
-    <label for="EvenInput">Enter a Number:</label>
-    <input id="EvenInput" type="number" placeholder="e.g., 2, 4, 6, 8..." />
+    <label for="EvenInput">Enter a Number:</label> 
+    <input id="EvenInput" type="number" placeholder="e.g., 2, 4, 6, 8..." min="1" max="10" />
     <button id="EvenBtn">Get the right answer</button>
     <p class="result" id="EvenResult" aria-live="polite"></p> 
-</section>
+</section>  
 
- <script src="conditional.js">
+
+
+
+     <!--Example 4: guess a number (if / else if / else)-->
+    <h2>Example 4 - guess the number</h2>
+    <p>Guess the random number between 1-10</p>
+    <label for="level">Level of difficulty</label>
+    <select name="level" id="level" placeholder="Choose here!">
+        <option value="easy">Easy</option>
+        <option value="normal">Normal</option>
+        <option value="hard">Hard</option>  
+    </select>
+    <label for="userNum">User Number</label>
+    
+    <input id="userNum" type="number" min="1" max="10" placeholder="Place your guess here">
+    <button id="guessBtn">Get Advice</button>
+    <p class="result" id="guessResult" aria-live="polite"></p>
+
+
+     <!--Our Logic game: hatching a pet  (if / else if / else)-->
+     <h2>Hatching a pet</h2>
+     
+
+
+
+
+
+
+
+ <script src="conditional.js">  
         
     </script>
     </body>

@@ -76,80 +76,61 @@
         });
 
 
-// Example 3; odd or even
-        const EvenInput = document.getElementById('EvenInput');
-        const EvenBtn = document.getElementById('EvenBtn');
-        const EvenResult = document.getElementById('EvenResult');
+ // JavaScript for the game logic
+    function playGame(playerChoice) {
+      const choices = ['rock', 'paper', 'scissors'];
+      const computerChoice = choices[Math.floor(Math.random() * choices.length)];
 
-        EvenBtn.addEventListener('click', () => {
-            const num = Number(NumInput.value);
-            if (isNaN(temp)) {
-                EvenResult.textContent = 'Please enter a valid temperature.';
-                EvenResult.style.color = 'crimson';
-                return;
-            }
+      let resultMessage = '';
+      if (playerChoice === computerChoice) {
+        resultMessage = `It's a tie! You both chose ${playerChoice}.`;
+      } else if (
+        (playerChoice === 'rock' && computerChoice === 'scissors') ||
+        (playerChoice === 'paper' && computerChoice === 'rock') ||
+        (playerChoice === 'scissors' && computerChoice === 'paper')
+      ) {
+        resultMessage = `You win! ${playerChoice.charAt(0).toUpperCase() + playerChoice.slice(1)} beats ${computerChoice}.`;
+      } else {
+        resultMessage = `You lose! ${computerChoice.charAt(0).toUpperCase() + computerChoice.slice(1)} beats ${playerChoice}.`;
+      }
 
-            // if / else if / else chain provides multiple branches depending on the temperature
-            if (num <= 5) {
-                EvenResult.textContent = 'Freezing! Wear a heavy coat.';
-                EvenResult.style.color = 'navy';
-            } else if (temp <= 20) {
-                tempResult.textContent = 'Cool weather. Wear a jacket.';
-                tempResult.style.color = 'teal';
-            } else if (temp <= 30) {
-                tempResult.textContent = 'Nice and warm.';
-                tempResult.style.color = 'green';
-            } else {
-                tempResult.textContent = 'Hot — stay hydrated and stay in the shade.';
-                tempResult.style.color = 'orange';
-            }
-       
-       
-        });
-
-        tempBtn.addEventListener('click', () => {
-            const temp = Number(tempInput.value);
-            if (isNaN(temp)) {
-                tempResult.textContent = 'Please enter a valid temperature.';
-                tempResult.style.color = 'crimson';
-                return;
-            }
-
-            // if / else if / else chain provides multiple branches depending on the temperature
-            if (temp <= 0) {
-                tempResult.textContent = 'Freezing! Wear a heavy coat.';
-                tempResult.style.color = 'navy';
-            } else if (temp <= 20) {
-                tempResult.textContent = 'Cool weather. Wear a jacket.';
-                tempResult.style.color = 'teal';
-            } else if (temp <= 30) {
-                tempResult.textContent = 'Nice and warm.';
-                tempResult.style.color = 'green';
-            } else {
-                tempResult.textContent = 'Hot — stay hydrated and stay in the shade.';
-                tempResult.style.color = 'orange';
-            }
-        });
+      document.getElementById('result').textContent = resultMessage;
+    }
 
 
-
-
-
-
-        // Example 3: Guess a number (if / else if / else)
+        // Example 4: Guess a number (if / else if / else)
         const userNumInput = document.getElementById('userNum');
         const guessBtn = document.getElementById('guessBtn');
         const guessResult = document.getElementById('guessResult');
+        const levelSelect = document.getElementById('level');                       
+        let maxNumber;
+        const  minNumber = 1;
 
         guessBtn.addEventListener('click', () => {
             const userNum = Number(userNumInput.value);
-            if (isNaN(userNum) || userNum < 1 || userNum > 10) {
+            if (isNaN(userNum) || userNum < minNumber || userNum > maxNumber) {
                 guessResult.textContent = 'Please enter a valid number between 1 and 10.';
                 guessResult.style.color = 'crimson';
                 return;
             }
+            const selectedLevel = levelSelect.value; 
+            switch (selectedLevel) {
+                case 'easy':
+                    maxNumber = 5;
+                    break;
+                case 'normal':
+                    maxNumber = 10;
+                    break;
+                case 'hard':
+                    maxNumber = 15;
+                    break;
+                default:
+                    guessResult.textContent = 'Please select a valid difficulty level.';
+                    guessResult.style.color = 'crimson';
+                    return;
+            }
 
-            const randomNum = Math.floor(Math.random() * 10) + 1;
+            const randomNum = Math.floor(Math.random() * maxNumber) + minNumber;
 
             // if / else if / else chain to check the guessed number
             if (userNum === randomNum) {
@@ -163,3 +144,13 @@
                 guessResult.style.color = 'orange';
             }
         });
+
+        document.getElementById("guessBtn").addEventListener("click", function () {
+    const num = document.getElementById("userNum").value;
+
+    if (!num) {
+        document.getElementById("guessResult").textContent = "Please enter a number!";
+    } else {
+        document.getElementById("guessResult").textContent = "You guessed: " + num;
+    }
+});
