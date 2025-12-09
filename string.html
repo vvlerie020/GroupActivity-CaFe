@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>String</title>
+</head>
+<body>
+     <label for="num1">ADD a Number</label>
+    <input type="number" id="num1" placeholder="number">
+      <label for="num2">ADD a Number</label>
+    <input for="num2" type="number" id="add1" placeholder="number">
+    <button id="add">Add</button>
+
+    <h4 id="ict"></h4>
+
+
+    <script>
+        const add1 = document.getElementById 
+        ("num1");
+        const add2 = document.getElementById
+        ("num2");
+        const insert = document.getElementById
+        ("result");
+
+          addName.addEventListener('click', function() {
+            const addends1 = Number (add1.value);
+            const addends2 = Number (add2.value);
+            insert.textContent = 'the sum is' ${addends1 + addends2}
+              });
+              let header = "Competence";
+              let tags = ["Guardian", "Geolina", "Nazol"];
+
+              let html = `<h2>${header}</h2><ul>`;
+            for (const x of tags) {
+                html += `</ul>`
+            }
+    </script>
+<!--
+    <label for="userInput">Username</label>
+    <input type="text" id="printName" placeholder="Enter USer name">
+    <button id="printName">Print name</button>
+      <p id="insert">
+
+    </p>
+ <script>
+    
+    let name = "sun"; 
+    document.getElementById("printName")
+    const addName = document.getElementById
+    ("addName");
+        let str = `welcome ${name}`;
+        console.log(str)
+        document.getElementById("insert")
+        .innerText = str;
+    addName.addEventListener('click', function() {
+        let inputName = document.getElementById("printName").value;
+        let welcomeStr = `welcome ${inputName}`;
+        document.getElementById("insert").innerText = welcomeStr
+    })
+     
+ </script>   
+ -->
+</body>
+</html>
