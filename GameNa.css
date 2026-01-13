@@ -1,0 +1,52 @@
+ body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f0f0f0;
+        }
+
+        /* Main wrapper */
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Left & Right sidebars */
+        .left, .right {
+            width: 20%;
+            background: #ddd;
+            padding: 10px;
+        }
+
+  /* Center (game area) */
+.center {
+    width: 60%;
+    background: #fff;
+    padding: 0;              /* WALANG padding */
+    display: flex;
+}
+
+/* Portrait game screens */
+.game-container,
+.game-content {
+    width: 50%;              /* eksaktong hati */
+    aspect-ratio: 9 / 16;
+    background: #000;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+
+    margin: 0;               /* WALANG margin */
+}
+
+
+        /* Mobile responsive */
+        @media (max-width: 768px) {
+            .layout {
+                flex-direction: column;
+            }
+            .left, .center, .right {
+                width: 100%;
+            }
+        }
