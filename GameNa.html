@@ -15,25 +15,131 @@
         <div class="left">
             <h3>Please Choose Your Character</h3>
             <p></p>
-            <button id="start-game" onclick="button">button</button>
+            
+            <button type="button" class="choices">
+                <img src="/pics/bboy.png" alt="boy">
+                 <span class="visually-hidden">Norm</span>
+            </button>
+              <button type="button" class="choices">
+                <img src="pics/boydrk.png" alt="2">
+                <span class="visually-hidden">Yvan</span>
+              </button>
+              <button type="button" class="choices">
+                <img src="pics/gboy.png" alt="gren">
+                <span class="visually-hidden">Vantill</span>
+              </button>
+              <button type="button" class="choices">
+                <img src="pics/yboy.png" alt="yellow">
+                <span class="visually-hidden">MJ</span>
+              </button>
+              <button type="button" class="choices">
+                <img src="pics/gdgril.png" alt="grengirl">
+                <span class="visually-hidden">Manon</span>
+              </button>
+              <button type="button" class="choices">
+                <img src="pics/ggirl.png" alt="gg">
+                <span class="visually-hidden">Megan</span>
+              </button>
+              <button type="button" class="choices">
+                <img src="pics/ogirl.png" alt="orangegirl">
+                <span class="visually-hidden">Lara</span>
+              </button>
+                <button type="button" class="choices">
+                    <img src="pics/ygirl.png" alt="yellowgirl">
+                    <span class="visually-hidden">Sonia</span>
+                </button>
+         
         </div>
 
         <!-- Center container -->
         <div class="center">
-            <div class="game-container">
+            <div class="game-container1">
                 Game goes here
             </div>
-            <div class="game-content" style="background-color: pink;">another one</div>
+        <div class="game-container2" style="background-color: pink;">another one</div>
         </div>
 
         <!-- Right container -->
         <div class="right">
             <h3>Please Choose Your Character</h3>
             <p></p>
-            <button id="start-game" onclick="button">button</button>
+              <button type="button" class="choices">
+                <img src="/pics/bboy.png" alt="boy">
+                 <span class="visually-hidden">Norm</span>
+            </button>
+              <button type="button" class="choices">
+                <img src="pics/boydrk.png" alt="2">
+                <span class="visually-hidden">Yvan</span>
+              </button>
+              <button type="button" class="choices">
+                <img src="pics/gboy.png" alt="gren">
+                <span class="visually-hidden">Vantill</span>
+              </button>
+              <button type="button" class="choices">
+                <img src="pics/yboy.png" alt="yellow">
+                <span class="visually-hidden">MJ</span>
+              </button>
+              <button type="button" class="choices">
+                <img src="pics/gdgril.png" alt="grengirl">
+                <span class="visually-hidden">Manon</span>
+              </button>
+              <button type="button" class="choices">
+                <img src="pics/ggirl.png" alt="gg">
+                <span class="visually-hidden">Megan</span>
+              </button>
+              <button type="button" class="choices">
+                <img src="pics/ogirl.png" alt="orangegirl">
+                <span class="visually-hidden">Lara</span>
+              </button>
+                <button type="button" class="choices">
+                    <img src="pics/ygirl.png" alt="yellowgirl">
+                    <span class="visually-hidden">Sonia</span>
+                </button>
         </div>
 
     </div>
+<script src="GameNa.js"></script>
+<script>
+// Handle character selection and show chosen character in center containers
+document.addEventListener('DOMContentLoaded', () => {
+  const leftPanel = document.querySelector('.left');
+  const rightPanel = document.querySelector('.right');
+  const container1 = document.querySelector('.game-container1');
+  const container2 = document.querySelector('.game-container2');
 
+  if (!leftPanel || !rightPanel || !container1 || !container2) return;
+
+  function selectCharacter(button, targetContainer) {
+    const img = button.querySelector('img');
+    if (!img) return;
+
+    // Clear previous selection
+    targetContainer.innerHTML = '';
+
+    const chosen = document.createElement('img');
+    chosen.src = img.src; // use resolved src
+    chosen.alt = img.alt || '';
+    chosen.className = 'selected-character';
+
+    targetContainer.appendChild(chosen);
+
+    const nameSpan = button.querySelector('.visually-hidden');
+    if (nameSpan && nameSpan.textContent.trim()) {
+      const label = document.createElement('div');
+      label.className = 'character-name';
+      label.textContent = nameSpan.textContent.trim();
+      targetContainer.appendChild(label);
+    }
+  }
+
+  leftPanel.querySelectorAll('.choices').forEach(btn => {
+    btn.addEventListener('click', () => selectCharacter(btn, container1));
+  });
+
+  rightPanel.querySelectorAll('.choices').forEach(btn => {
+    btn.addEventListener('click', () => selectCharacter(btn, container2));
+  });
+});
+</script>
 </body>
 </html>
