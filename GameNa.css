@@ -13,7 +13,7 @@
         /* Left & Right sidebars */
         .left, .right {
             width: 20%;
-            background: #ddd;
+            background: #CDC1FF;
             padding: 10px;
         }
 
@@ -30,8 +30,7 @@
 .game-container2 {
     width: 50%;              /* eksaktong hati */
     aspect-ratio: 9 / 16;
-    background: #000;
-
+    background-color: pink;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -50,15 +49,19 @@
     display: block;
 }
 
+
 .character-name {
     position: absolute;
-    bottom: 8px;
-    left: 8px;
+    left: 50%;
+    transform: translateX(-50%);
     color: #000;
-    background: rgba(255,255,255,0.75);
-    padding: 2px 6px;
+    background: rgba(92, 244, 234, 0.75);
+    padding: 4px 10px;
     border-radius: 4px;
     font-weight: 600;
+    text-align: center;
+    bottom: 65px;
+      border: 3px solid #D78FEE;
 }
 
 
@@ -73,14 +76,16 @@
         }
         
 .choices {
-    background: none;
-    border: 2px solid transparent;
-    padding: 4px;
-    border-radius: 6px;
+    background: #3291B6;
+    border: 5px solid #D78FEE;
+    padding: 6px;
+    border-radius: 2px;
     cursor: pointer;
+    margin: 8px;
+    text-align: center;
 }
 .choices img {
-    width: 64px;
+    width: 75px;
     height: 64px;
     display: block;
 }
