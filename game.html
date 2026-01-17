@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Sequence Guessing Game</title>
+    <link rel="stylesheet" href="game.css">
+   
+</head>
+<body>
+    <button id="menu-btn">Menu</button>
+    <div id="dropdown">
+        <div id="how-content" style="display: none;">How to Play: Click an image to select, then click a slot to place. Submit to check. Correct earns points, wrong returns.</div>
+        <div id="guide-content" style="display: none;">Guide: Fill all slots to advance rounds.</div>
+        <div id="about-content" style="display: none;">About: A guessing game with images.</div>
+        <button id="how-btn">How to Play</button>
+        <button id="guide-btn">Guide</button>
+        <button id="about-btn">About</button>
+        <button id="back-home-btn">Back to Homepage</button>
+    </div>
+
+    <div id="cover-page">
+        <h1>Image Sequence Guessing Game</h1>
+        <button id="play-btn">Play</button>
+    </div>
+
+    <div id="homepage">
+        <div id="mode-selection">
+            <h2>Select Mode</h2>
+            <button id="single-player-btn">Single Player</button>
+            <button id="multiplayer-btn">Multiplayer</button>
+        </div>
+        <div id="registration">
+            <h2>Enter Names</h2>
+            <input type="text" id="player1-name" placeholder="Player 1 Name">
+            <input type="text" id="player2-name" placeholder="Player 2 Name" style="display: none;">
+            <button id="start-game-btn">Start Game</button>
+        </div>
+    </div>
+
+    <div id="game">
+        <div id="scores">
+            <div id="player1-score">Player 1: 0</div>
+            <div id="player2-score">Player 2: 0</div>
+        </div>
+        <div id="turn">Player 1's turn</div>
+        <div id="placement-area"></div>
+        <div id="hidden-area">
+            <div id="barrier"></div>
+            <div id="hidden-slots" style="display: none;"></div>
+        </div>
+        <div id="pool"></div>
+        <button id="submit-guess-btn">Submit Guess</button>
+    </div>
+   <script src="game.js"></script>
+   
+</body>
+</html>

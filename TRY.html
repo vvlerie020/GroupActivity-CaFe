@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Image Sequence Guessing Game</title>
+<style>
+/* --- Styles (same as before) --- */
+body { font-family: Arial; margin: 0; background: #f0f0f0; }
+#menu-btn { position: fixed; top:10px; left:10px; display:none; padding:10px; background:#333; color:white; border:none; cursor:pointer; z-index:1000;}
+#dropdown { position: fixed; top:50px; left:10px; background:white; border:1px solid #ccc; display:none; z-index:1000; width:200px;}
+#dropdown div, #dropdown button { padding:10px; border-bottom:1px solid #eee; text-align:center; width:100%; cursor:pointer;}
+#cover-page { display:flex; flex-direction:column; align-items:center; justify-content:center; height:100vh; background:linear-gradient(to bottom,#4CAF50,#2196F3); color:white; text-align:center;}
+#cover-page h1 { font-size:48px; margin-bottom:20px; }
+#cover-page button { padding:15px 30px; font-size:24px; background:white; color:#333; border:none; border-radius:5px; cursor:pointer; }
+#homepage { display:none; flex-direction:column; align-items:center; justify-content:center; height:100vh; text-align:center;}
+#registration { display:none; flex-direction:column; align-items:center;}
+#registration input { margin-bottom:10px; padding:8px; width:200px;}
+#game { display:none; max-width:800px; margin:0 auto; padding:20px;}
+#scores { display:flex; justify-content:space-between; font-weight:bold; margin-bottom:10px;}
+#turn, #round { text-align:center; margin-bottom:10px; font-weight:bold;}
+#placement-area { display:flex; justify-content:center; margin-bottom:20px; }
+.slot { width:80px; height:80px; border:2px solid black; margin:0 5px; background:white; cursor:pointer; position:relative; }
+.slot img { width:100%; height:100%; object-fit:cover; }
+#hidden-area { position:relative; height:100px; background:#ddd; margin-bottom:20px; display:flex; justify-content:center; align-items:center;}
+#barrier { position:absolute; top:0; left:0; width:100%; height:100%; background:url('https://via.placeholder.com/800x100/000000/FFFFFF?text=Hidden+Images') no-repeat center; background-size:cover; display:flex; justify-content:center; align-items:center; color:white; font-size:24px; text-shadow:2px 2px 4px rgba(0,0,0,0.5);}
+#pool { display:flex; flex-wrap:wrap; justify-content:center; margin-bottom:20px;}
+.image-piece { width:70px; height:70px; margin:5px; cursor:pointer; border:1px solid #ccc; display:inline-block; }
+.image-piece.selected { border:3px solid blue; opacity:0.7;}
+.image-piece img { width:100%; height:100%; object-fit:cover; }
+#submit-guess-btn, button { padding:10px 20px; margin:10px; font-size:16px; }
+@media (max-width:600px){ .slot{width:60px;height:60px;} .image-piece{width:50px;height:50px;} #game{padding:10px;} }
+</style>
+</head>
+<body>
+
+<button id="menu-btn">Menu</button>
+<div id="dropdown">
+    <div id="how-content" style="display:none;">How to Play: Click an image to select, then click a slot to place. Submit to check. Correct earns points, wrong returns.</div>
+    <div id="guide-content" style="display:none;">Guide: Fill all slots to advance rounds.</div>
+    <div id="about-content" style="display:none;">About: A guessing game with images.</div>
+    <button id="how-btn">How to Play</button>
+    <button id="guide-btn">Guide</button>
+    <button id="about-btn">About</button>
+    <button id="back-home-btn">Back to Homepage</button>
+</div>
+
+<div id="cover-page">
+    <h1>Image Sequence Guessing Game</h1>
+    <button id="play-btn">Play</button>
+</div>
+
+<div id="homepage">
+    <div id="mode-selection">
+        <h2>Select Mode</h2>
+        <button id="single-player-btn">Single Player</button>
+        <button id="multiplayer-btn">Multiplayer</button>
+    </div>
+    <div id="registration">
+        <h2>Enter Names</h2>
+        <input type="text" id="player1-name" placeholder="Player 1 Name">
+        <input type="text" id="player2-name" placeholder="Player 2 Name" style="display:none;">
+        <button id="start-game-btn">Start Game</button>
+    </div>
+</div>
+
+<div id="game">
+    <div id="scores">
+        <div id="player1-score">Player 1: 0</div>
+        <div id="player2-score">Player 2: 0</div>
+    </div>
+    <div id="turn">Player 1's turn</div>
+    <div id="round">Round 1</div>
+    <div id="placement-area"></div>
+    <div id="hidden-area">
+        <div id="barrier"></div>
+        <div id="hidden-slots" style="display:none;"></div>
+    </div>
+    <div id="pool"></div>
+    <button id="submit-guess-btn">Submit Guess</button>
+</div>
+
+<script>
+const images = [
+    'pics/bigteeth.jpg','pics/chinpoint.jpg','pics/flirty.jpg','pics/floewerteeth.jpg',
+    'pics/gahaman.jpg','pics/happy.jpg','pics/inlove.jpg','pics/pacute.jpg','pics/shhkindat.jpg','pics/thinking.jpg'
+];
+
+let mode='', players=['',''], currentPlayer=0, scores=[0,0], round=1;
+let hidden=[], pool=[], placement=[], basePoints=10, selectedImage=null;
+
+function showCoverPage(){ document.getElementById('cover-page').style.display='flex'; document.getElementById('homepage').style.display='none'; document.getElementById('game').style.display='none'; document.getElementById('menu-btn').style.display='none'; }
+function showModeSelection(){ document.getElementById('cover-page').style.display='none'; document.getElementById('homepage').style.display='flex'; document.getElementById('mode-selection').style.display='block'; document.getElementById('registration').style.display='none'; document.getElementById('game').style.display='none'; document.getElementById('menu-btn').style.display='block'; document.getElementById('dropdown').style.display='none'; document.getElementById('how-content').style.display='none'; document.getElementById('guide-content').style.display='none'; document.getElementById('about-content').style.display='none'; }
+function showRegistration(){ document.getElementById('mode-selection').style.display='none'; document.getElementById('registration').style.display='flex'; document.getElementById('player2-name').style.display=mode==='single'?'none':'block'; }
+function startGame(){ players[0]=document.getElementById('player1-name').value||'Player 1'; players[1]=mode==='multi'?document.getElementById('player2-name').value||'Player 2':'Computer'; document.getElementById('homepage').style.display='none'; document.getElementById('game').style.display='block'; initRound(); }
+function updateScores(){ document.getElementById('player1-score').textContent=`${players[0]}: ${scores[0]}`; document.getElementById('player2-score').textContent=`${players[1]}: ${scores[1]}`; }
+function updateTurn(){ document.getElementById('turn').textContent=`${players[currentPlayer]}'s turn`; }
+
+function shuffle(array){ return array.sort(()=>Math.random()-0.5); }
+
+/* ---------- ROUND ---------- */
+function initRound(){
+    const slots = 4 + (round-1)*2;  // start 4, +2 per round
+    hidden = shuffle([...images]).slice(0, slots); // pick hidden images & shuffle
+    placement=new Array(slots).fill(null);
+    pool=[...hidden]; // pool matches hidden for solvable round
+
+    renderHidden(); renderPlacement(); renderPool(); updateScores();
+    document.getElementById('round').textContent=`Round ${round}`;
+    currentPlayer=0; selectedImage=null;
+    updateTurn();
+
+    // If computer goes first
+    if(mode==='single' && players[currentPlayer]==='Computer'){
+        setTimeout(computerTurn,1000);
+    }
+}
+
+/* ---------- RENDER ---------- */
+function renderHidden(){ const hiddenSlots=document.getElementById('hidden-slots'); hiddenSlots.innerHTML=''; hidden.forEach(img=>{ const div=document.createElement('div'); div.className='slot'; const imgEl=document.createElement('img'); imgEl.src=img; div.appendChild(imgEl); hiddenSlots.appendChild(div); }); }
+function renderPlacement(){ const placementArea=document.getElementById('placement-area'); placementArea.innerHTML=''; placement.forEach((img,index)=>{ const div=document.createElement('div'); div.className='slot'; div.dataset.index=index; if(img){ const imgEl=document.createElement('img'); imgEl.src=img; div.appendChild(imgEl); } placementArea.appendChild(div); }); }
+function renderPool(){ const poolDiv=document.getElementById('pool'); poolDiv.innerHTML=''; pool.forEach(img=>{ const div=document.createElement('div'); div.className='image-piece'; div.dataset.img=img; const imgEl=document.createElement('img'); imgEl.src=img; div.appendChild(imgEl); poolDiv.appendChild(div); }); }
+
+/* ---------- GUESS ---------- */
+function submitGuess(){
+    if(placement.some(p=>p===null)){ alert('Fill all slots!'); return; }
+
+    let anyCorrect=false;
+    placement.forEach((img,index)=>{
+        if(img===hidden[index]){ scores[currentPlayer]+=10; anyCorrect=true; }
+        else { placement[index]=null; pool.push(img); }
+    });
+
+    renderPlacement(); renderPool(); updateScores();
+
+    if(!anyCorrect){ currentPlayer=(currentPlayer+1)%2; }
+
+    updateTurn();
+
+    if(mode==='single' && players[currentPlayer]==='Computer'){ setTimeout(computerTurn,1000); }
+
+    if(placement.every((p,i)=>p===hidden[i])){
+        round++;
+        if(round>3){ const winner = scores[0]>scores[1]?players[0]:scores[1]>scores[0]?players[1]:'Tie'; alert(`Game Over! Winner: ${winner}`); }
+        else{ initRound(); }
+    }
+}
+
+/* ---------- COMPUTER ---------- */
+function computerTurn(){
+    const emptySlots = placement.map((p,i)=>p===null?i:-1).filter(i=>i!==-1);
+    emptySlots.forEach(index=>{
+        const correctImg=hidden[index];
+        let poolIndex=pool.indexOf(correctImg);
+        if(poolIndex!==-1){ placement[index]=pool.splice(poolIndex,1)[0]; scores[currentPlayer]+=10; }
+        else{ placement[index]=pool.splice(Math.floor(Math.random()*pool.length),1)[0]; }
+    });
+
+    renderPlacement(); renderPool(); updateScores();
+
+    currentPlayer=0; updateTurn();
+
+    if(placement.every((p,i)=>p===hidden[i])){
+        round++;
+        if(round>3){ const winner = scores[0]>scores[1]?players[0]:scores[1]>scores[0]?players[1]:'Tie'; alert(`Game Over! Winner: ${winner}`); }
+        else{ initRound(); }
+    }
+}
+
+/* ---------- EVENTS ---------- */
+document.getElementById('play-btn').addEventListener('click',showModeSelection);
+document.getElementById('single-player-btn').addEventListener('click',()=>{mode='single'; showRegistration();});
+document.getElementById('multiplayer-btn').addEventListener('click',()=>{mode='multi'; showRegistration();});
+document.getElementById('start-game-btn').addEventListener('click',startGame);
+document.getElementById('submit-guess-btn').addEventListener('click',submitGuess);
+
+document.getElementById('pool').addEventListener('click',e=>{
+    const piece=e.target.closest('.image-piece'); if(piece){ document.querySelectorAll('.image-piece').forEach(p=>p.classList.remove('selected')); piece.classList.add('selected'); selectedImage=piece.dataset.img; }
+});
+
+document.getElementById('placement-area').addEventListener('click',e=>{
+    const slot=e.target.closest('.slot'); if(slot && selectedImage){
+        const index=parseInt(slot.dataset.index);
+        if(placement[index]===null){
+            placement[index]=selectedImage;
+            pool.splice(pool.indexOf(selectedImage),1);
+            selectedImage=null;
+            document.querySelectorAll('.image-piece').forEach(p=>p.classList.remove('selected'));
+            renderPlacement(); renderPool();
+        }
+    }
+});
+
+showCoverPage();
+</script>
+</body>
+</html>

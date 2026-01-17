@@ -1,0 +1,212 @@
+ body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url(pics/cover.jpg);
+         
+  background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+  background-attachment: fixed;
+        }
+        #menu-btn {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            background: #333;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            z-index: 1000;
+            display: none;
+        }
+        #dropdown {
+            position: fixed;
+            top: 50px;
+            left: 10px;
+            background: white;
+            border: 1px solid #ccc;
+            display: none;
+            z-index: 1000;
+            width: 200px;
+        }
+        #dropdown div {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            text-align: center;
+        }
+        #dropdown button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            text-align: left;
+        }
+        #cover-page {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-image: url(pics/cover.jpg);
+            background-size: cover;
+            background-position: center;
+            color: white;
+            text-align: center;
+        }
+        #cover-page h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+        #cover-page button {
+            padding: 15px 30px;
+            font-size: 24px;
+            background: white;
+            color: #333;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #homepage {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            text-align: center;
+        }
+        #mode-selection {
+            margin-bottom: 20px;
+        }
+        #registration {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+        }
+        #registration input {
+            margin-bottom: 10px;
+            padding: 8px;
+            width: 200px;
+        }
+        #registration button {
+            margin-top: 10px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        #game {
+            display: none;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        #scores {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        #turn {
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        #placement-area {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .slot {
+            width: 80px;
+            height: 80px;
+            border: 2px solid black;
+            margin: 0 5px;
+            display: inline-block;
+            background: white;
+            position: relative;
+            cursor: pointer;
+        }
+        .slot img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        #hidden-area {
+            position: relative;
+            height: 100px;
+            background: #ddd;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #barrier {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://via.placeholder.com/800x100/000000/FFFFFF?text=Hidden+Images') no-repeat center;
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 24px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        #pool {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .image-piece {
+            width: 70px;
+            height: 70px;
+            margin: 5px;
+            cursor: pointer;
+            border: 1px solid #ccc;
+            display: inline-block;
+            opacity: 1;
+        }
+        .image-piece.selected {
+            border: 3px solid blue;
+            opacity: 0.7;
+        }
+        .image-piece img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        #submit-guess-btn {
+            display: block;
+            margin: 0 auto;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin: 10px;
+        }
+        @media (max-width: 600px) {
+            #menu-btn {
+                top: 10px;
+                left: 10px;
+            }
+            #game {
+                padding: 10px;
+            }
+            .slot {
+                width: 60px;
+                height: 60px;
+            }
+            .image-piece {
+                width: 50px;
+                height: 50px;
+            }
+        }
+    
