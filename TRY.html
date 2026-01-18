@@ -265,65 +265,83 @@ function submitGuess(){ //<!-- Check if player's placement is correct
 
     renderPlacement(); renderPool(); updateScores(); //Redraw the placement area, pool, and scores 
 
-    if(!anyCorrect){ currentPlayer=(currentPlayer+1)%2; }
+    if(!anyCorrect){ //If no placements were correct
+        currentPlayer=(currentPlayer+1)%2; } //Switch to other player (0→1 or 1→0
 
-    updateTurn();
+    updateTurn(); // Update display to show whose turn now 
 
-    if(mode==='single' && players[currentPlayer]==='Computer'){ setTimeout(computerTurn,1000); }
+    if(mode==='single' && players[currentPlayer]==='Computer'){ //If single-player AND it's now computer's turn 
+         setTimeout(computerTurn,1000); } //Wait 1 second, then run computer's turn
 
-    if(placement.every((p,i)=>p===hidden[i])){
-        round++;
-        if(round>3){ const winner = scores[0]>scores[1]?players[0]:scores[1]>scores[0]?players[1]:'Tie'; alert(`Game Over! Winner: ${winner}`); }
-        else{ initRound(); }
+    if(placement.every((p,i)=>p===hidden[i])){ //If all placements are correct
+        round++; // Go to next round
+        if(round>3){ //If we're past round 3
+             const winner = scores[0]>scores[1]?players[0]:scores[1]>scores[0]?players[1]:'Tie'; // Determine winner: if Player 1 score higher → Player 1 wins, else if Player 2 higher → Player 2 wins, else Tie
+             alert(`Game Over! Winner: ${winner}`); } // Show game over message with winner
+        else{ initRound(); } //If still in rounds 1-3
     }
 }
 
 /* ---------- COMPUTER ---------- */
-function computerTurn(){
-    const emptySlots = placement.map((p,i)=>p===null?i:-1).filter(i=>i!==-1);
-    emptySlots.forEach(index=>{
-        const correctImg=hidden[index];
-        let poolIndex=pool.indexOf(correctImg);
-        if(poolIndex!==-1){ placement[index]=pool.splice(poolIndex,1)[0]; scores[currentPlayer]+=10; }
+function computerTurn(){ //Computer automatically fills all empty slots
+    const emptySlots = placement.map((p,i)=>p===null?i:-1).filter(i=>i!==-1); 
+    //Find all empty slot positions (returns their indices) 
+    emptySlots.forEach(index=>{ //For each empty slot
+        const correctImg=hidden[index]; //Get the correct image for this slot
+        let poolIndex=pool.indexOf(correctImg); //Check if the correct image is in the pool
+        if(poolIndex!==-1){ //If correct image IS in the pool 
+             placement[index]=pool.splice(poolIndex,1)[0]; //Place the correct image and remove from pool 
+             scores[currentPlayer]+=10; } //Award points
         else{ placement[index]=pool.splice(Math.floor(Math.random()*pool.length),1)[0]; }
     });
 
-    renderPlacement(); renderPool(); updateScores();
+    renderPlacement(); renderPool(); updateScores(); //Redraw placement, pool, and scores
 
-    currentPlayer=0; updateTurn();
+    currentPlayer=0; updateTurn();//Switch back to Player 1
 
-    if(placement.every((p,i)=>p===hidden[i])){
-        round++;
-        if(round>3){ const winner = scores[0]>scores[1]?players[0]:scores[1]>scores[0]?players[1]:'Tie'; alert(`Game Over! Winner: ${winner}`); }
+    if(placement.every((p,i)=>p===hidden[i])){ //If all are correct (computer solved it)
+        round++; //Next round
+        if(round>3){ //if past round 3
+             const winner = scores[0]>scores[1]?players[0]:scores[1]>scores[0]?players[1]:'Tie'; alert(`Game Over! Winner: ${winner}`); }
         else{ initRound(); }
     }
 }
 
 /* ---------- EVENTS ---------- */
-document.getElementById('play-btn').addEventListener('click',showModeSelection);
+document.getElementById('play-btn').addEventListener('click',showModeSelection); 
+//When Play button clicked: show mode selection screen
 document.getElementById('single-player-btn').addEventListener('click',()=>{mode='single'; showRegistration();});
+//When Single Player clicked: set mode to 'single' and show name input
 document.getElementById('multiplayer-btn').addEventListener('click',()=>{mode='multi'; showRegistration();});
+//When Multiplayer clicked: set mode to 'multi' and show name input
 document.getElementById('start-game-btn').addEventListener('click',startGame);
+//When Start Game clicked: initialize and start the game 
 document.getElementById('submit-guess-btn').addEventListener('click',submitGuess);
-
+// When Submit Guess clicked: check the player's placements
 document.getElementById('pool').addEventListener('click',e=>{
-    const piece=e.target.closest('.image-piece'); if(piece){ document.querySelectorAll('.image-piece').forEach(p=>p.classList.remove('selected')); piece.classList.add('selected'); selectedImage=piece.dataset.img; }
+    //When any image in the pool is clicked
+    const piece=e.target.closest  ('.image-piece');//Get the image piece that was clicked
+     if(piece){  //If an image piece was clicked
+         document.querySelectorAll('.image-piece').forEach(p=>p.classList.remove('selected')); //Remove 'selected' styling from ALL images
+          piece.classList.add('selected'); // Add 'selected' styling to the clicked image
+          selectedImage=piece.dataset.img; }  //Store that image as the currently selected one
 });
 
-document.getElementById('placement-area').addEventListener('click',e=>{
-    const slot=e.target.closest('.slot'); if(slot && selectedImage){
-        const index=parseInt(slot.dataset.index);
-        if(placement[index]===null){
-            placement[index]=selectedImage;
-            pool.splice(pool.indexOf(selectedImage),1);
-            selectedImage=null;
-            document.querySelectorAll('.image-piece').forEach(p=>p.classList.remove('selected'));
-            renderPlacement(); renderPool();
+document.getElementById('placement-area').addEventListener('click',e=>{ // When any slot in placement area is clicked
+    const slot=e.target.closest('.slot'); //Get the slot that was clicked 
+    if(slot && selectedImage){ // If a slot was clicked AND an image is selected 
+        const index=parseInt(slot.dataset.index); //Get the slot's position number
+        if(placement[index]===null){ //If that slot is empty 
+            placement[index]=selectedImage; //Place the selected image in the slot 
+            pool.splice(pool.indexOf(selectedImage),1); //Remove that image from the pool
+            selectedImage=null; //clear the selection
+            document.querySelectorAll('.image-piece').forEach(p=>p.classList.remove('selected')); // Remove highlight from all images
+            renderPlacement(); renderPool(); //Redraw the placement area and pool
         }
     }
 });
 
-showCoverPage();
+showCoverPage(); // When page loads: start by showing the cover/splash screen
 </script>
 </body>
 </html>
