@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Image Sequence Guessing Game</title>
+
+<style>
+:root{
+    --cover-bg: url('pics/cover-bg.jpg');   /* 👈 COVER IMAGE */
+    --game-bg: url('pics/game-bg.jpg');     /* 👈 GAME IMAGE */
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+/* ---------- SECTIONS ---------- */
+section {
+    display: none;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-size: cover;
+    background-position: center;
+}
+
+section.active { display: flex; }
+
+/* Cover only */
+#cover {
+    background-image: var(--cover-bg);
+}
+
+/* Rest of game */
+#home, #game {
+    background-image: var(--game-bg);
+}
+
+/* ---------- UI ---------- */
+button {
+    padding: 10px 20px;
+    margin: 8px;
+    cursor: pointer;
+}
+
+input {
+    padding: 8px;
+    margin: 5px;
+}
+
+#scores {
+    display: flex;
+    justify-content: space-between;
+    width: 80%;
+    font-weight: bold;
+}
+
+#placement-area {
+    display: flex;
+    margin: 15px;
+}
+
+.slot {
+    width: 80px;
+    height: 80px;
+    border: 2px solid black;
+    margin: 5px;
+    background: white;
+}
+
+.slot.locked { border-color: green; }
+
+#pool {
+    display: flex;
+    flex-wrap: wrap;
+    width: 80%;
+    justify-content: center;
+}
+
+.image-piece {
+    width: 70px;
+    height: 70px;
+    margin: 5px;
+    border: 1px solid #aaa;
+}
+
+.image-piece.selected {
+    border: 3px solid blue;
+    opacity: .7;
+}
+
+.slot img, .image-piece img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+</style>
+</head>
+
+<body>
+
+<!-- COVER -->
+<section id="cover" class="active">
+    <h1 style="color:white;">Image Sequence Guessing Game</h1>
+    <button id="playBtn">Play</button>
+</section>
+
+<!-- HOME -->
+<section id="home">
+    <h2>Select Mode</h2>
+    <button id="singleBtn">Single Player</button>
+    <button id="multiBtn">Multiplayer</button>
+
+    <div id="registration" style="display:none;">
+        <input id="p1Input" placeholder="Player 1 Name">
+        <input id="p2Input" placeholder="Player 2 Name">
+        <button id="startBtn">Start Game</button>
+    </div>
+</section>
+
+<!-- GAME -->
+<section id="game">
+    <div id="scores">
+        <span id="p1Score"></span>
+        <span id="p2Score"></span>
+    </div>
+
+    <div id="turn"></div>
+    <div id="round"></div>
+
+    <div id="placement-area"></div>
+    <div id="pool"></div>
+
+    <button id="submitBtn">Submit Guess</button>
+</section>
+
+<script>
+/* ---------- DATA ---------- */
+const images=[
+'pics/bigteeth.jpg','pics/chinpoint.jpg','pics/flirty.jpg',
+'pics/floewerteeth.jpg','pics/gahaman.jpg','pics/happy.jpg',
+'pics/inlove.jpg','pics/pacute.jpg','pics/shhkindat.jpg','pics/thinking.jpg'
+];
+
+let players=[], scores=[0,0], currentPlayer=0, round=1, mode='';
+let hidden=[], pool=[], placement=[], locked=[];
+let selectedImage=null, aiThinking=false;
+
+/* ---------- HELPERS ---------- */
+const shuffle=a=>a.sort(()=>Math.random()-0.5);
+const show=s=>{
+    document.querySelectorAll('section').forEach(x=>x.classList.remove('active'));
+    s.classList.add('active');
+};
+
+/* ---------- FLOW ---------- */
+playBtn.onclick=()=>show(home);
+
+singleBtn.onclick=()=>{
+    mode='single';
+    registration.style.display='block';
+    p2Input.style.display='none';
+};
+
+multiBtn.onclick=()=>{
+    mode='multi';
+    registration.style.display='block';
+    p2Input.style.display='block';
+};
+
+startBtn.onclick=()=>{
+    if(!p1Input.value.trim()){
+        alert('Player 1 name is required!');
+        return;
+    }
+    if(mode==='multi' && !p2Input.value.trim()){
+        alert('Player 2 name is required!');
+        return;
+    }
+
+    players=[
+        p1Input.value.trim(),
+        mode==='single'?'Computer':p2Input.value.trim()
+    ];
+
+    show(game);
+    initRound();
+};
+
+/* ---------- ROUND ---------- */
+function initRound(){
+    const slots = round===1?4:round===2?6:8;
+    shuffle(images);
+    hidden = images.slice(0, slots);
+    pool = [...hidden, ...images.slice(slots, slots+2)];
+    shuffle(pool);
+    placement = Array(slots).fill(null);
+    locked = Array(slots).fill(false);
+    currentPlayer = 0;
+    aiThinking=false;
+    render();
+}
+
+/* ---------- RENDER ---------- */
+function render(){
+    p1Score.textContent=`${players[0]}: ${scores[0]}`;
+    p2Score.textContent=`${players[1]}: ${scores[1]}`;
+    turn.textContent=`${players[currentPlayer]}'s turn`;
+    round.textContent=`Round ${round}`;
+
+    placementArea.innerHTML='';
+    placement.forEach((img,i)=>{
+        const s=document.createElement('div');
+        s.className='slot'+(locked[i]?' locked':'');
+        s.dataset.index=i;
+        if(img) s.innerHTML=`<img src="${img}">`;
+        placementArea.appendChild(s);
+    });
+
+    pool.innerHTML='';
+    pool.forEach(img=>{
+        const p=document.createElement('div');
+        p.className='image-piece';
+        p.dataset.img=img;
+        p.innerHTML=`<img src="${img}">`;
+        pool.appendChild(p);
+    });
+
+    submitBtn.disabled = aiThinking;
+}
+
+/* ---------- PLAYER INPUT ---------- */
+pool.onclick=e=>{
+    if(aiThinking) return;
+    const p=e.target.closest('.image-piece');
+    if(!p) return;
+    document.querySelectorAll('.image-piece').forEach(x=>x.classList.remove('selected'));
+    p.classList.add('selected');
+    selectedImage=p.dataset.img;
+};
+
+placementArea.onclick=e=>{
+    if(aiThinking) return;
+    const s=e.target.closest('.slot');
+    if(!s) return;
+    const i=+s.dataset.index;
+    if(locked[i]) return;
+
+    if(placement[i]){
+        pool.push(placement[i]);
+        placement[i]=null;
+    } else if(selectedImage){
+        placement[i]=selectedImage;
+        pool.splice(pool.indexOf(selectedImage),1);
+        selectedImage=null;
+    }
+    render();
+};
+
+/* ---------- SUBMIT ---------- */
+submitBtn.onclick=()=>{
+    let wrong=false;
+    placement.forEach((img,i)=>{
+        if(img===hidden[i] && !locked[i]){
+            scores[currentPlayer]+=10;
+            locked[i]=true;
+        } else if(img && img!==hidden[i]){
+            pool.push(img);
+            placement[i]=null;
+            wrong=true;
+        }
+    });
+
+    if(wrong) currentPlayer=(currentPlayer+1)%2;
+
+    if(mode==='single' && currentPlayer===1){
+        aiThinking=true;
+        render();
+        setTimeout(aiPreview,800);
+        return;
+    }
+
+    if(locked.every(Boolean)){
+        round++;
+        round>3?alert('Game Over'):initRound();
+        return;
+    }
+    render();
+};
+
+/* ---------- AI ---------- */
+function aiPreview(){
+    placement.forEach((img,i)=>{
+        if(!locked[i] && img===null){
+            let pick = pool.includes(hidden[i]) && Math.random()<0.7
+                ? hidden[i]
+                : pool[Math.floor(Math.random()*pool.length)];
+            placement[i]=pick;
+            pool.splice(pool.indexOf(pick),1);
+        }
+    });
+    render();                 // SHOW AI MOVE
+    setTimeout(aiSubmit,1200);
+}
+
+function aiSubmit(){
+    placement.forEach((img,i)=>{
+        if(img===hidden[i] && !locked[i]){
+            scores[1]+=10;
+            locked[i]=true;
+        } else if(img && img!==hidden[i]){
+            pool.push(img);
+            placement[i]=null;
+        }
+    });
+    currentPlayer=0;
+    aiThinking=false;
+
+    if(locked.every(Boolean)){
+        round++;
+        round>3?alert('Game Over'):initRound();
+        return;
+    }
+    render();
+}
+</script>
+
+</body>
+</html>
