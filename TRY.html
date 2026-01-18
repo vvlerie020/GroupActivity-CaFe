@@ -85,53 +85,185 @@ const images = [
     'pics/bigteeth.jpg','pics/chinpoint.jpg','pics/flirty.jpg','pics/floewerteeth.jpg',
     'pics/gahaman.jpg','pics/happy.jpg','pics/inlove.jpg','pics/pacute.jpg','pics/shhkindat.jpg','pics/thinking.jpg'
 ];
-
+// let mode='', kung ilan players single or multiple 
+// players=['',''], dito nilalagay yung player names
+// currentPlayer=0, kung sino titira like 1 or 0 
+// scores=[0,0],  dito nilalagay yung scores
 let mode='', players=['',''], currentPlayer=0, scores=[0,0], round=1;
+// let hidden=[],  array of images na need hulaan
+// pool=[],kung ilan pwede ilagay
+// placement=[], kung ilan image ang nalagay
+// selectedImage=null; napiling images sa pool
+// basePoints=10, pints na makukuha pag tama
 let hidden=[], pool=[], placement=[], basePoints=10, selectedImage=null;
 
-function showCoverPage(){ document.getElementById('cover-page').style.display='flex'; document.getElementById('homepage').style.display='none'; document.getElementById('game').style.display='none'; document.getElementById('menu-btn').style.display='none'; }
-function showModeSelection(){ document.getElementById('cover-page').style.display='none'; document.getElementById('homepage').style.display='flex'; document.getElementById('mode-selection').style.display='block'; document.getElementById('registration').style.display='none'; document.getElementById('game').style.display='none'; document.getElementById('menu-btn').style.display='block'; document.getElementById('dropdown').style.display='none'; document.getElementById('how-content').style.display='none'; document.getElementById('guide-content').style.display='none'; document.getElementById('about-content').style.display='none'; }
-function showRegistration(){ document.getElementById('mode-selection').style.display='none'; document.getElementById('registration').style.display='flex'; document.getElementById('player2-name').style.display=mode==='single'?'none':'block'; }
-function startGame(){ players[0]=document.getElementById('player1-name').value||'Player 1'; players[1]=mode==='multi'?document.getElementById('player2-name').value||'Player 2':'Computer'; document.getElementById('homepage').style.display='none'; document.getElementById('game').style.display='block'; initRound(); }
-function updateScores(){ document.getElementById('player1-score').textContent=`${players[0]}: ${scores[0]}`; document.getElementById('player2-score').textContent=`${players[1]}: ${scores[1]}`; }
-function updateTurn(){ document.getElementById('turn').textContent=`${players[currentPlayer]}'s turn`; }
+function showCoverPage(){ 
+    document.getElementById('cover-page').style.display='cover'; //display cover page 
+ document.getElementById('homepage').style.display='none'; //<!-- Hide homepage -->
+ document.getElementById('game').style.display='none'; // hide game are 
+  document.getElementById('menu-btn').style.display='none'; } // hide menu button
+function showModeSelection(){ //shows the player choice
+    document.getElementById('cover-page').style.display='none'; //hide cover page
+ document.getElementById('homepage').style.display='flex'; //show homepage 
+ document.getElementById('mode-selection').style.display='block'; //show mode selection
+ document.getElementById('registration').style.display='none'; //hide name input
+ document.getElementById('game').style.display='none'; //hide game area
+document.getElementById('menu-btn').style.display='block'; //show menu button
+ document.getElementById('dropdown').style.display='none'; //hide dropdown menu
+ document.getElementById('how-content').style.display='none'; //hide how to play
+ document.getElementById('guide-content').style.display='none'; // hide guide
+ document.getElementById('about-content').style.display='none'; } // hide about
+function showRegistration(){
+     document.getElementById('mode-selection').style.display='none'; //hide mode selection
+document.getElementById('registration').style.display='flex'; //show name input
+document.getElementById('player2-name').style.display=mode==='single'?'none':'block'; } // If single-player, hide Player 2 input; if multiplayer, show it 
 
-function shuffle(array){ return array.sort(()=>Math.random()-0.5); }
+function startGame(){ // Start the game
+    players[0]=document.getElementById('player1-name').value||'Player 1'; // Get Player 1 name from input, default to 'Player 1' if empty 
+     players[1]=mode==='multi'?document.getElementById('player2-name').value||'Player 2':'Computer'; //If multiplayer: get Player 2 name, else set to 'Computer'
+document.getElementById('homepage').style.display='none'; // Hide homepage
+document.getElementById('game').style.display='block';  // Show game area 
+initRound(); }// start the first round
+function updateScores(){ //scores on display screen
+     document.getElementById('player1-score').textContent=`${players[0]}: ${scores[0]}`; //player 1 score
+ document.getElementById('player2-score').textContent=`${players[1]}: ${scores[1]}`; }// player 2 score
+function updateTurn(){
+     document.getElementById('turn').textContent=`${players[currentPlayer]}'s turn`; //display current player's turn
+
+ }
+
+function shuffle(array){
+     return array.sort(()=>Math.random()-0.10); }  //randomly shuffles array elements
+// change it to -0.10 for better shuffling
 
 /* ---------- ROUND ---------- */
-function initRound(){
-    const slots = 4 + (round-1)*2;  // start 4, +2 per round
-    hidden = shuffle([...images]).slice(0, slots); // pick hidden images & shuffle
-    placement=new Array(slots).fill(null);
-    pool=[...hidden]; // pool matches hidden for solvable round
+function initRound(){ //new round
+    const slots = 4 + (round-1)*2;  // round 1, 4 slots; round 2, 6 slots; round 3, 8 slots
+    hidden = shuffle([...images]).slice(0, slots); // <!-- Pick first 'slots' number of shuffled images as the hidden ones to guess -->
+    placement=new Array(slots).fill(null); // Create empty array of same size (all null = empty slots) -->
+    pool=[...hidden]; //  Copy hidden array so pool has exactly the images needed 
 
-    renderHidden(); renderPlacement(); renderPool(); updateScores();
-    document.getElementById('round').textContent=`Round ${round}`;
-    currentPlayer=0; selectedImage=null;
-    updateTurn();
+    renderHidden(); renderPlacement(); renderPool(); updateScores(); // Draw all three areas and update scores
+    document.getElementById('round').textContent=`Round ${round}`; //Display current round number
+    currentPlayer=0; //Reset to Player 1 
+    selectedImage=null; //Clear any selected image
+    updateTurn(); // Update display to show whose turn
 
-    // If computer goes first
+    // If computer turn
     if(mode==='single' && players[currentPlayer]==='Computer'){
-        setTimeout(computerTurn,1000);
+        setTimeout(computerTurn,1000); // Wait 1 second, then run computer's turn 
     }
 }
 
 /* ---------- RENDER ---------- */
-function renderHidden(){ const hiddenSlots=document.getElementById('hidden-slots'); hiddenSlots.innerHTML=''; hidden.forEach(img=>{ const div=document.createElement('div'); div.className='slot'; const imgEl=document.createElement('img'); imgEl.src=img; div.appendChild(imgEl); hiddenSlots.appendChild(div); }); }
-function renderPlacement(){ const placementArea=document.getElementById('placement-area'); placementArea.innerHTML=''; placement.forEach((img,index)=>{ const div=document.createElement('div'); div.className='slot'; div.dataset.index=index; if(img){ const imgEl=document.createElement('img'); imgEl.src=img; div.appendChild(imgEl); } placementArea.appendChild(div); }); }
-function renderPool(){ const poolDiv=document.getElementById('pool'); poolDiv.innerHTML=''; pool.forEach(img=>{ const div=document.createElement('div'); div.className='image-piece'; div.dataset.img=img; const imgEl=document.createElement('img'); imgEl.src=img; div.appendChild(imgEl); poolDiv.appendChild(div); }); }
+function renderHidden(){
+    // Gets the HTML element where hidden images will be displayed
+    const hiddenSlots=document.getElementById('hidden-slots');
+    
+    // Clears out any previously rendered slots (starts fresh)
+    hiddenSlots.innerHTML='';
+    
+    // Loops through each image in the 'hidden' array
+    hidden.forEach(img=>{
+        // Creates a new div element for each slot
+        const div=document.createElement('div');
+        
+        // Adds the 'slot' class for styling
+        div.className='slot';
+        
+        // Creates an img element
+        const imgEl=document.createElement('img');
+        
+        // Sets the image source to the current hidden image
+        imgEl.src=img;
+        
+        // Adds the img element inside the div
+        div.appendChild(imgEl);
+        
+        // Adds the complete slot to the page
+        hiddenSlots.appendChild(div);
+    });
+}
+function renderPlacement(){
+    // Gets the placement area where players put their guesses
+    const placementArea=document.getElementById('placement-area');
+    
+    // Clears previous slots
+    placementArea.innerHTML='';
+    
+    // Loops through each slot in the 'placement' array
+    placement.forEach((img,index)=>{
+        // Creates a new div for the slot
+        const div=document.createElement('div');
+        
+        // Adds 'slot' class for styling
+        div.className='slot';
+        
+        // Stores the index so the game knows which slot was clicked
+        div.dataset.index=index;
+        
+        // If there's an image in this slot (not null)
+        if(img){
+            // Creates an img element
+            const imgEl=document.createElement('img');
+            
+            // Sets the image source
+            imgEl.src=img;
+            
+            // Adds the image to the slot
+            div.appendChild(imgEl);
+        }
+        
+        // Adds the slot to the page
+        placementArea.appendChild(div);
+    });
+}
+function renderPool(){
+    // Gets the pool container (where available images are shown)
+    const poolDiv=document.getElementById('pool');
+    
+    // Clears previous images
+    poolDiv.innerHTML='';
+    
+    // Loops through each image still available in 'pool'
+    pool.forEach(img=>{
+        // Creates a new div for the image piece
+        const div=document.createElement('div');
+        
+        // Adds 'image-piece' class for styling
+        div.className='image-piece';
+        
+        // Stores the image source as data (for clicking)
+        div.dataset.img=img;
+        
+        // Creates an img element
+        const imgEl=document.createElement('img');
+        
+        // Sets the image source
+        imgEl.src=img;
+        
+        // Adds the image to the piece
+        div.appendChild(imgEl);
+        
+        // Adds the piece to the pool
+        poolDiv.appendChild(div);
+    });
+}
 
 /* ---------- GUESS ---------- */
-function submitGuess(){
-    if(placement.some(p=>p===null)){ alert('Fill all slots!'); return; }
+function submitGuess(){ //<!-- Check if player's placement is correct 
+    if(placement.some(p=>p===null)){ //If any slot is empty (null)
+        alert('Fill all slots!'); return; } //erroe message
 
-    let anyCorrect=false;
-    placement.forEach((img,index)=>{
-        if(img===hidden[index]){ scores[currentPlayer]+=10; anyCorrect=true; }
-        else { placement[index]=null; pool.push(img); }
+    let anyCorrect=false; // Flag to track if any guesses were correct
+    placement.forEach((img,index)=>{ // Loop through each placed image
+        if(img===hidden[index]){ scores[currentPlayer]+=10; // If correct, add points
+             anyCorrect=true; } // if correct place
+        else { //if image doesnt match
+             placement[index]=null; pool.push(img); } //clear the incorrect placement and return image to pool
     });
 
-    renderPlacement(); renderPool(); updateScores();
+    renderPlacement(); renderPool(); updateScores(); //Redraw the placement area, pool, and scores 
 
     if(!anyCorrect){ currentPlayer=(currentPlayer+1)%2; }
 
