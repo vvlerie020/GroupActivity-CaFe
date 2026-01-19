@@ -5,38 +5,101 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>INDEX</title>
     <style>
-        body {
+     body {
     font-family: Arial, sans-serif;
     text-align: center;
-    margin: 20px;
+    margin: 0;
+    padding: 20px;
+    background-image: url('pics/home1.avif');
+    background-repeat: no-repeat;
+    background-size: cover;
 }
         .pics {
     display: flex;
     justify-content: center; /* Centers images horizontally */
-    gap: 50px; /* Space between images */
+    gap: 90px; /* Space between images */
     flex-wrap: wrap; /* Allows wrapping on smaller screens */
 }
-.pics img {
+.pics img,
+#game {
+    width: 100%;
     max-width: 150px;
+    height: 30%;
 }
-#green {
+
+.progress-container {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+.progress-item {
+    text-align: center;
+}
+
+.progress-item p {
+    margin-top: 8px;
+    font-weight: bold;
+}
+.green {
     width: 200px;
     height: 20px;
     accent-color: green;
 }
-#yellow {
+
+.yellow {
     width: 200px;
     height: 20px;
     accent-color: yellow;
 }
 #game {
-    margin-top: 20px;
-    max-width: 300px;
+    max-width: 280px;
 }
 #click {
     border-radius: 30px;
     font-size: xx-large;
     
+}
+h1 {
+    color: rgb(15, 15, 26);
+
+    margin-top: 40px;
+}
+* {
+    box-sizing: border-box;
+}
+
+body {
+    overflow-x: hidden;
+}
+@media (max-width: 600px) {
+
+    .pics {
+        gap: 20px;
+    }
+
+    .progress-container {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .green,
+    .yellow {
+        width: 90vw;
+        max-width: 260px;
+    }
+
+    h1 {
+        font-size: 22px;
+    }
+
+    #click {
+        font-size: 24px;
+        padding: 10px 20px;
+    }
 }
     </style>
 </head>
@@ -44,19 +107,27 @@
     <h1>Welcome to the page of  G.E.M Codes!</h1>
     
    <div class="pics">
-    <img src="pics/bigteeth.jpg" alt="">
-    <img src="pics/flirty.jpg" alt="">
-    <img src="pics/chinpoint.jpg" alt="">
+    <img src="pics/me.jpg" alt="">
+    <img src="pics/mar.jpg" alt="">
+    <img src="pics/fernandez.jpg" alt="">
     
    </div>
 
-   <div>
-  <label for="green">a</label>
-<progress id="green" value="100" max="100"> </progress>
-<label for="yellow"></label>
-<progress id="yellow" value="100" max="100"></progress>
-<label for="green"></label>
-<progress id="green" value="100" max="100"></progress>
+<div class="progress-container">
+    <div class="progress-item">
+        <progress class="green" value="100" max="100"></progress>
+        <p>Camacho, Grace Valerie Q.</p>
+    </div>
+
+    <div class="progress-item">
+        <progress class="yellow" value="100" max="100"></progress>
+        <p>Cabatay, Mark Clarence</p>
+    </div>
+
+    <div class="progress-item">
+        <progress class="green" value="100" max="100"></progress>
+        <p>Fernandez, Elisha Mae</p>
+    </div>
 </div>
 <h1>TRY OUT OUR GAME ☟</h1>
   <img id="game" src="pics/game.jpg" alt="">
