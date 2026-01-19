@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Place The Emoji</title>
+<link rel="icon" type="image/x-icon" href="pics/cover.jpg">
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+/* MENU */
+#menuBtn {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    z-index: 1000;
+}
+
+#menu {
+    position: fixed;
+    top: 45px;
+    left: 10px;
+    background: white;
+    border: 1px solid #ccc;
+    display: none;
+    z-index: 1000;
+}
+
+#menu button {
+    display: block;
+    width: 180px;
+    padding: 10px;
+    border: none;
+    background: none;
+    text-align: left;
+    cursor: pointer;
+}
+
+/* SECTIONS */
+section {
+    display: none;
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+}
+
+section.active {
+    display: flex;
+}
+
+/* HOME BOX */
+.home-box {
+    background-color: rgba(255,255,255,0.85);
+    padding: 35px 45px;
+    border-radius: 30px;
+    text-align: center;
+    min-width: 320px;
+}
+
+#homeTitle {
+    color: #444;
+    margin-bottom: 20px;
+}
+
+/* BUTTONS */
+button {
+    padding: 10px 20px;
+    margin: 8px;
+    cursor: pointer;
+    border-radius: 20px;
+}
+
+#modeButtons button,
+#startBtn {
+    display: block;
+    width: 220px;
+    margin: 10px auto;
+    background-color: rgba(221, 160, 221, 0.354);
+}
+
+/* INPUTS */
+#registration input {
+    display: block;
+    width: 220px;
+    margin: 10px auto;
+    padding: 8px;
+    border-radius: 15px;
+    border: 1px solid #ccc;
+}
+
+/* GAME */
+#placement-area {
+    display: flex;
+    margin: 15px;
+}
+
+.slot {
+    width: 80px;
+    height: 80px;
+    border: 2px solid black;
+    margin: 5px;
+    background: white;
+}
+
+.slot.locked {
+    border-color: green;
+}
+
+#pool {
+    display: flex;
+    flex-wrap: wrap;
+    width: 80%;
+    justify-content: center;
+}
+
+.image-piece {
+    width: 70px;
+    height: 70px;
+    margin: 5px;
+    border: 1px solid #aaa;
+}
+
+.image-piece.selected {
+    border: 3px solid blue;
+}
+
+.image-piece img,
+.slot img {
+    width: 100%;
+    height: 100%;
+}
+
+/* BACKGROUNDS */
+#cover {
+    background: url("pics/cover.png") center/cover no-repeat;
+}
+
+#home {
+    background: url("pics/select.jpg") center/cover no-repeat;
+}
+
+#game {
+    background: url("pics/back.png") center/cover no-repeat;
+}
+</style>
+</head>
+
+<body>
+
+<button id="menuBtn" style="background-color: rgba(255,192,203,0.75);">☰ Menu</button>
+<div id="menu">
+    <button id="howBtn">How to Play</button>
+    <button id="aboutBtn">About</button>
+    <button id="homeBtn">Back to Home</button>
+</div>
+
+<!-- COVER -->
+<section id="cover" class="active">
+    <button id="playBtn" style="font-size:30px; background-color: rgba(255,192,203,0.75);">
+        Play
+    </button>
+</section>
+
+<!-- HOME -->
+<section id="home">
+    <div class="home-box">
+        <h1 id="homeTitle">Select Mode</h1>
+
+        <div id="modeButtons">
+            <button id="singleBtn">Single Player</button>
+            <button id="multiBtn">Multiplayer</button>
+        </div>
+
+        <div id="registration" style="display:none;">
+            <input id="p1Input" placeholder="Player 1 Name">
+            <input id="p2Input" placeholder="Player 2 Name">
+            <button id="startBtn">Start Game</button>
+        </div>
+    </div>
+</section>
+
+<!-- GAME -->
+<section id="game">
+    <h2 id="turn"></h2>
+    <h3 id="round"></h3>
+    <div id="placement-area"></div>
+    <div id="pool"></div>
+    <button id="submitBtn">Submit Guess</button>
+</section>
+
+<script>
+const cover = document.getElementById('cover');
+const home = document.getElementById('home');
+const game = document.getElementById('game');
+
+const playBtn = document.getElementById('playBtn');
+const singleBtn = document.getElementById('singleBtn');
+const multiBtn = document.getElementById('multiBtn');
+const startBtn = document.getElementById('startBtn');
+const submitBtn = document.getElementById('submitBtn');
+
+const menuBtn = document.getElementById('menuBtn');
+const menu = document.getElementById('menu');
+const howBtn = document.getElementById('howBtn');
+const aboutBtn = document.getElementById('aboutBtn');
+const homeBtn = document.getElementById('homeBtn');
+
+const homeTitle = document.getElementById('homeTitle');
+const modeButtons = document.getElementById('modeButtons');
+const registration = document.getElementById('registration');
+const p1Input = document.getElementById('p1Input');
+const p2Input = document.getElementById('p2Input');
+
+const turnEl = document.getElementById('turn');
+const roundEl = document.getElementById('round');
+const placementArea = document.getElementById('placement-area');
+const poolEl = document.getElementById('pool');
+
+const images = [
+    'pics/bigteeth.jpg','pics/chinpoint.jpg','pics/flirty.jpg',
+    'pics/floewerteeth.jpg','pics/gahaman.jpg','pics/happy.jpg'
+];
+
+let players = [];
+let scores = [0,0];
+let currentPlayer = 0;
+let round = 1;
+let mode = '';
+let hidden = [], pool = [], placement = [], locked = [];
+let selectedImage = null;
+
+const shuffle = a => a.sort(() => Math.random() - 0.5);
+const show = s => {
+    [cover, home, game].forEach(x => x.classList.remove('active'));
+    s.classList.add('active');
+};
+
+menuBtn.onclick = () => menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+
+howBtn.onclick = () => alert('Match the emojis to the correct slots!');
+aboutBtn.onclick = () => alert(
+'Emoji Guessing Game\n\nCreated by Group CaFe'
+);
+
+homeBtn.onclick = () => location.reload();
+
+playBtn.onclick = () => show(home);
+
+singleBtn.onclick = () => {
+    mode = 'single';
+    homeTitle.textContent = 'Enter Name';
+    modeButtons.style.display = 'none';
+    registration.style.display = 'block';
+    p2Input.style.display = 'none';
+};
+
+multiBtn.onclick = () => {
+    mode = 'multi';
+    homeTitle.textContent = 'Enter Names';
+    modeButtons.style.display = 'none';
+    registration.style.display = 'block';
+    p2Input.style.display = 'block';
+};
+
+startBtn.onclick = () => {
+    if (!p1Input.value) return alert('Enter Player 1 name');
+    if (mode === 'multi' && !p2Input.value) return alert('Enter Player 2 name');
+
+    players = [p1Input.value, mode === 'single' ? 'Computer' : p2Input.value];
+    show(game);
+    initRound();
+};
+
+function initRound() {
+    shuffle(images);
+    hidden = images.slice(0,4);
+    pool = [...hidden];
+    shuffle(pool);
+    placement = Array(4).fill(null);
+    locked = Array(4).fill(false);
+    render();
+}
+
+function render() {
+    turnEl.textContent = players[currentPlayer] + "'s turn";
+    roundEl.textContent = "Round " + round;
+    placementArea.innerHTML = '';
+    poolEl.innerHTML = '';
+
+    placement.forEach((img,i)=>{
+        const s = document.createElement('div');
+        s.className = 'slot';
+        s.dataset.index = i;
+        if(img) s.innerHTML = `<img src="${img}">`;
+        placementArea.appendChild(s);
+    });
+
+    pool.forEach(img=>{
+        const p = document.createElement('div');
+        p.className = 'image-piece';
+        p.dataset.img = img;
+        p.innerHTML = `<img src="${img}">`;
+        poolEl.appendChild(p);
+    });
+}
+</script>
+
+</body>
+</html>

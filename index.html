@@ -4,10 +4,64 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>INDEX</title>
+    <style>
+        body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 20px;
+}
+        .pics {
+    display: flex;
+    justify-content: center; /* Centers images horizontally */
+    gap: 50px; /* Space between images */
+    flex-wrap: wrap; /* Allows wrapping on smaller screens */
+}
+.pics img {
+    max-width: 150px;
+}
+#green {
+    width: 200px;
+    height: 20px;
+    accent-color: green;
+}
+#yellow {
+    width: 200px;
+    height: 20px;
+    accent-color: yellow;
+}
+#game {
+    margin-top: 20px;
+    max-width: 300px;
+}
+#click {
+    border-radius: 30px;
+    font-size: xx-large;
+    
+}
+    </style>
 </head>
 <body>
-    <h1>Group activity Cafe</h1>
-    <a href="PlaceTheEmoji.html">Game</a>
-   
+    <h1>Welcome to the page of  G.E.M Codes!</h1>
+    
+   <div class="pics">
+    <img src="pics/bigteeth.jpg" alt="">
+    <img src="pics/flirty.jpg" alt="">
+    <img src="pics/chinpoint.jpg" alt="">
+    
+   </div>
+
+   <div>
+  <label for="green">a</label>
+<progress id="green" value="100" max="100"> </progress>
+<label for="yellow"></label>
+<progress id="yellow" value="100" max="100"></progress>
+<label for="green"></label>
+<progress id="green" value="100" max="100"></progress>
+</div>
+<h1>TRY OUT OUR GAME ☟</h1>
+  <img id="game" src="pics/game.jpg" alt="">
+  <a href="PlaceTheEmoji.html"> <br>
+  <button id="click" style="margin-top: 20px; padding: 5px;">☞ Install</button>
+</a>
 </body>
 </html>
