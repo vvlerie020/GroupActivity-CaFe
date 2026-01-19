@@ -9,9 +9,9 @@
 body {
     margin: 0;
     font-family: Arial, sans-serif;
-    background: #f0f0f0;
 }
 
+/* MENU */
 #menuBtn {
     position: fixed;
     top: 10px;
@@ -55,13 +55,40 @@ button {
     cursor: pointer;
 }
 
-#scores {
+/* SCORES AND TURN BOXES */
+#scoresContainer {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     width: 80%;
-    font-weight: bold;
+    margin-bottom: 10px;
 }
 
+.scoreBox {
+    padding: 15px 20px;
+    border-radius: 20px;
+    background-color: rgba(255,255,255,0.8);
+    font-weight: bold;
+    min-width: 120px;
+    text-align: center;
+}
+
+#turnRoundContainer {
+    display: flex;
+    justify-content: space-around;
+    width: 80%;
+    margin-bottom: 15px;
+}
+
+.roundBox {
+    padding: 10px 15px;
+    border-radius: 15px;
+    background-color: rgba(255,255,255,0.8);
+    font-weight: bold;
+    min-width: 120px;
+    text-align: center;
+}
+
+/* GAME LAYOUT */
 #placement-area {
     display: flex;
     margin: 15px;
@@ -107,49 +134,85 @@ button {
     height: 100%;
     object-fit: cover;
 }
+
+/* BACKGROUNDS */
+#cover {
+    background-image: url("pics/coverr.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+#home {
+    background-image: url("pics/select.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+#game {
+    background-image: url("pics/back.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* PLAY BUTTON */
+#playBtn {
+    margin-top: 30%;
+    border-radius: 20px;
+}
 </style>
 </head>
 
 <body>
 
-<button id="menuBtn">☰ Menu</button>
+<button id="menuBtn" style="background-color: rgba(255, 255, 255, 0.432); border-radius: 20px;">☰ Menu</button>
 <div id="menu">
     <button id="howBtn">How to Play</button>
     <button id="aboutBtn">About</button>
     <button id="homeBtn">Back to Home</button>
 </div>
 
+<!-- COVER PAGE -->
 <section id="cover" class="active">
-    <button id="playBtn">Play</button>
+    <button id="playBtn" style="font-size: 30px; border-radius: 50px; margin-top: 30%;
+    background-color: rgba(221, 160, 221, 0.495);">Play</button>
 </section>
 
+<!-- MODE / ENTER NAME PAGE -->
 <section id="home">
-    <h2>Select Mode</h2>
+    <h1 id="homeTitle" style="color: #ededed;">Select Mode</h1>
+
     <div id="modeButtons">
-        <button id="singleBtn">Single Player</button>
-        <button id="multiBtn">Multiplayer</button>
+        <button id="singleBtn" style="background-color: rgba(221, 160, 221, 0.354);">Single Player</button>
+        <button id="multiBtn" style="background-color: rgba(221, 160, 221, 0.354); ">Multiplayer</button>
     </div>
 
     <div id="registration" style="display:none;">
         <input id="p1Input" placeholder="Player 1 Name">
         <input id="p2Input" placeholder="Player 2 Name">
-        <button id="startBtn">Start Game</button>
+        <button id="startBtn" style="background-color: rgba(221, 160, 221, 0.354); ">Start Game</button>
     </div>
 </section>
 
+<!-- GAME PAGE -->
 <section id="game">
-    <div id="scores">
-        <span id="p1Score"></span>
-        <span id="p2Score"></span>
+    <div id="scoresContainer">
+        <div class="scoreBox" id="p1Score" style="margin-right: 500px;"></div>
+        <div class="scoreBox" id="p2Score"></div>
     </div>
 
-    <div id="turn"></div>
-    <div id="round"></div>
+    <div id="turnRoundContainer">
+        <div class="roundBox" id="turn" style="margin-right: 500px;"></div>
+        <div class="roundBox" id="round" ></div>
+    </div>
 
-    <div id="placement-area"></div>
-    <div id="pool"></div>
+    <div id="placement-area" style="margin-top: 50px;"></div>
+    <div id="pool" style="margin-top: 50px;"></div>
 
-    <button id="submitBtn">Submit Guess</button>
+    <button id="submitBtn" style="border-radius: 20px; background-color: rgba(221, 160, 221, 0.354);
+    margin-top: 50px;">Submit Guess</button>
 </section>
 
 <script>
@@ -170,6 +233,7 @@ const howBtn = document.getElementById('howBtn');
 const aboutBtn = document.getElementById('aboutBtn');
 const homeBtn = document.getElementById('homeBtn');
 
+const homeTitle = document.getElementById('homeTitle');
 const modeButtons = document.getElementById('modeButtons');
 const registration = document.getElementById('registration');
 const p1Input = document.getElementById('p1Input');
@@ -207,8 +271,17 @@ const show = s => {
 
 /* ---------- MENU ---------- */
 menuBtn.onclick = () => menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
-howBtn.onclick = () => alert('Select an image, place it in a slot, submit. Correct = +10.');
-aboutBtn.onclick = () => alert('Image Sequence Guessing Game');
+howBtn.onclick = () => alert('Each round has empty slots and a set of emoji choices. Your goal is to guess the correct positions of the emojis to earn points. When you place an emoji in the correct position, you earn points and the emoji stays in the slot. If the placement is wrong, the emoji returns to the choices. The game continues through all rounds until Round 3. Good luck!');
+aboutBtn.onclick = () => alert(
+  'The Emoji Guessing Game is a fun and easy \'game\' where players match silly face emojis to the correct empty boxes by tapping.\n' +
+  'The boxes at the top have no emojis, while the emojis are shown below. Players must guess where each emoji should be placed by tapping the emoji and the correct box.\n' +
+  'The goal of the game is to guess correctly and enjoy matching the silly emoji faces.\n\n' +
+  'Created by Group CaFe:\n' +
+  'Grace Camacho\n' +
+  'Elisha Fernandez\n' +
+  'Clarence Cabatay'
+);
+
 homeBtn.onclick = () => location.reload();
 
 /* ---------- FLOW ---------- */
@@ -216,6 +289,7 @@ playBtn.onclick = () => show(home);
 
 singleBtn.onclick = () => {
     mode = 'single';
+    homeTitle.textContent = 'Enter Name';
     modeButtons.style.display = 'none';
     registration.style.display = 'block';
     p2Input.style.display = 'none';
@@ -223,15 +297,19 @@ singleBtn.onclick = () => {
 
 multiBtn.onclick = () => {
     mode = 'multi';
+    homeTitle.textContent = 'Enter Names';
     modeButtons.style.display = 'none';
     registration.style.display = 'block';
     p2Input.style.display = 'block';
 };
 
 startBtn.onclick = () => {
+    if (!p1Input.value.trim()) { alert("Player 1 name is required!"); return; }
+    if (mode==='multi' && !p2Input.value.trim()) { alert("Player 2 name is required!"); return; }
+
     players = [
-        p1Input.value || 'Player 1',
-        mode === 'single' ? 'Computer' : (p2Input.value || 'Player 2')
+        p1Input.value.trim(),
+        mode === 'single' ? 'Computer' : p2Input.value.trim()
     ];
     show(game);
     initRound();
@@ -344,7 +422,7 @@ submitBtn.onclick = () => {
     render();
 };
 
-/* ---------- AI TURN (FIXED) ---------- */
+/* ---------- AI TURN ---------- */
 function aiTurn(){
     placement.forEach((img,i)=>{
         if(img===null && !locked[i]){
@@ -359,7 +437,6 @@ function aiTurn(){
         }
     });
 
-    let wrong=false;
     placement.forEach((img,i)=>{
         if(img===hidden[i]){
             if(!locked[i]){
@@ -369,7 +446,6 @@ function aiTurn(){
         } else if(img){
             pool.push(img);
             placement[i]=null;
-            wrong=true;
         }
     });
 
@@ -385,8 +461,6 @@ function aiTurn(){
 
     render();
 }
-
 </script>
-
 </body>
 </html>
