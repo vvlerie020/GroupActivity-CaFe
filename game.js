@@ -58,9 +58,9 @@ const show = s => {
 function updateChat(playerIndex, correctCount, wrong) {
     const box = playerIndex === 0 ? chatLeft : chatRight;
     if (wrong) {
-        box.textContent = `${players[playerIndex]} placed a wrong emoji ❌`;
+        box.textContent = `${players[playerIndex]} placed a wrong emoji`;
     } else {
-        box.textContent = `${players[playerIndex]} correct placements: ${correctCount} ✅`;
+        box.textContent = `${players[playerIndex]} correct placements: ${correctCount}`;
     }
 }
 
