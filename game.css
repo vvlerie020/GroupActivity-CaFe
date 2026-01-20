@@ -200,6 +200,7 @@ button {
 
 #chatLeft {
     left: 10px;
+    margin-left: 50px
 }
 
 #chatRight {
