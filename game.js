@@ -54,7 +54,7 @@ const show = s => {
     s.classList.add('active');
       homeBtn.style.display = (s === cover) ? 'none' : 'block';
 };
-};
+
 function updateChat(playerIndex, correctCount, wrong) {
     const box = playerIndex === 0 ? chatLeft : chatRight;
     if (wrong) {

@@ -70,6 +70,7 @@ button {
     justify-content: space-around;
     width: 80%;
     margin-bottom: 15px;
+    
 }
 
 .roundBox {
@@ -79,6 +80,7 @@ button {
     font-weight: bold;
     min-width: 120px;
     text-align: center;
+    
 }
 
 /* GAME LAYOUT */
@@ -185,27 +187,29 @@ button {
 /* CHAT BOXES */
 .chatbox {
     position: fixed;
-    top: 50%;
+    top: 60%;
     transform: translateY(-50%);
     width: 180px;
     min-height: 80px;
-    padding: 12px;
+    padding-top: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
     border-radius: 15px;
     background-color: rgba(255, 255, 255, 0.85);
     font-size: 14px;
     font-weight: bold;
     text-align: center;
+    
     pointer-events: none;
    
 }
 
 #chatLeft {
-    left: 10px;
-    margin-left: 50px
+    left: 100px;
 }
 
 #chatRight {
-    right: 10px;
+    right: 100px;
 }
 
 /* Mobile */
