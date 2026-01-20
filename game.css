@@ -182,6 +182,37 @@ button {
     background-position: center;
     background-repeat: no-repeat;
 }
+/* CHAT BOXES */
+.chatbox {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 180px;
+    min-height: 80px;
+    padding: 12px;
+    border-radius: 15px;
+    background-color: rgba(255, 255, 255, 0.85);
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    pointer-events: none;
+}
+
+#chatLeft {
+    left: 10px;
+}
+
+#chatRight {
+    right: 10px;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .chatbox {
+        width: 140px;
+        font-size: 12px;
+    }
+}
 
 /* PLAY BUTTON */
 #playBtn {
