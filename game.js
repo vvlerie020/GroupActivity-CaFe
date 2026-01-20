@@ -8,6 +8,7 @@ const singleBtn = document.getElementById('singleBtn');
 const multiBtn = document.getElementById('multiBtn');
 const startBtn = document.getElementById('startBtn');
 const submitBtn = document.getElementById('submitBtn');
+homeBtn.style.display = 'none'
 //menu elements
 const menuBtn = document.getElementById('menuBtn');
 const menu = document.getElementById('menu');
@@ -27,8 +28,11 @@ const turnEl = document.getElementById('turn');
 const roundEl = document.getElementById('round');
 const placementArea = document.getElementById('placement-area');
 const poolEl = document.getElementById('pool');
+//chat elements
 const chatLeft = document.getElementById('chatLeft');
 const chatRight = document.getElementById('chatRight');
+;
+
 
 
 /* ---------- GAME DATA ---------- */
@@ -48,19 +52,23 @@ let selectedImage = null;
 let aiThinking = false;
 
 /* ---------- HELPERS ---------- */
-const shuffle = a => a.sort(() => Math.random() - 0.5);
 const show = s => {
-    [cover,home,game].forEach(x=>x.classList.remove('active'));
+    [cover, home, game].forEach(x => x.classList.remove('active'));
     s.classList.add('active');
-      homeBtn.style.display = (s === cover) ? 'none' : 'block';
+
+    // Hide Home button only on Cover
+    if (s === cover) {
+        homeBtn.style.display = 'none';
+    } else {
+        homeBtn.style.display = 'block';
+    }
 };
 
-function updateChat(playerIndex, correctCount, wrong) {
+
+function updateChat(playerIndex, correctPlacement, wrong) {
     const box = playerIndex === 0 ? chatLeft : chatRight;
     if (wrong) {
-        box.textContent = `${players[playerIndex]} placed a wrong emoji`;
-    } else {
-        box.textContent = `${players[playerIndex]} correct placements: ${correctCount}`;
+        box.textContent = `${players[playerIndex]} correct placements: ${correctPlacement}` ;
     }
 }
 
@@ -69,10 +77,10 @@ function updateChat(playerIndex, correctCount, wrong) {
 menuBtn.onclick = () => menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
 howBtn.onclick = () => alert('Each round has empty slots and a set of emoji choices. Your goal is to guess the correct positions of the emojis to earn points. When you place an emoji in the correct position, you earn points and the emoji stays in the slot. If the placement is wrong, the emoji returns to the choices. The game continues through all rounds until Round 3. Good luck!');
 aboutBtn.onclick = () => alert(
-  'The Emoji Guessing Game is a fun and easy \'game\' where players match silly face emojis to the correct empty boxes by tapping.\n' +
+  'The Place The Emoji is a fun and easy \'game\' where players place silly face emojis to the correct empty boxes by tapping.\n' +
   'The boxes at the top have no emojis, while the emojis are shown below. Players must guess where each emoji should be placed by tapping the emoji and the correct box.\n' +
   'The goal of the game is to guess correctly and enjoy matching the silly emoji faces.\n\n' +
-  'Created by Group CaFe:\n' +
+  'Created by Group G.E.M Codes:\n' +
   'Grace Camacho\n' +
   'Elisha Fernandez\n' +
   'Clarence Cabatay'

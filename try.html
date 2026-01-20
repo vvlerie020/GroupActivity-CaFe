@@ -233,10 +233,15 @@ button {
         width: 90%;
         max-width: 300px;
     }
+    #leftChat, #chatRight {
+        width: 90%;
+        max-width: 300px;
+        font-size: 12px;
+    }
 }
 @media (max-width: 768px) {
     #playBtn {
-        margin-top: 60vh;
+        margin-top: 70vh;
     }
 }
 </style>
@@ -349,10 +354,16 @@ const shuffle = a => a.sort(() => Math.random() - 0.5);//Randomizes emoji order.
 const show = s => {
     [cover,home,game].forEach(x=>x.classList.remove('active'));
     s.classList.add('active'); //Shows only ONE screen at a time. If removed: All screens show at once.
+function updateChat(playerIndex, correctPlacement, wrong) {
+    if (wrong) return; // player didn't place it correctly → no update
+
+    const box = playerIndex === 0 ? chatLeft : chatRight;
+    box.textContent = `${players[playerIndex]} correct placements: ${correctPlacement}`;
+}
 };
 
 /* ----------GAME FLOW ---------- */
-playBtn.onclick = () => show(home); 
+playBtn.onclick = () => show(home);
 // When Play button is clicked, go from Cover page → Home page. 
 // If removed: Play button does nothing, user is stuck on cover.
 
