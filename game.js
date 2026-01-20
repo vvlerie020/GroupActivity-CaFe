@@ -52,6 +52,8 @@ const shuffle = a => a.sort(() => Math.random() - 0.5);
 const show = s => {
     [cover,home,game].forEach(x=>x.classList.remove('active'));
     s.classList.add('active');
+      homeBtn.style.display = (s === cover) ? 'none' : 'block';
+};
 };
 function updateChat(playerIndex, correctCount, wrong) {
     const box = playerIndex === 0 ? chatLeft : chatRight;
