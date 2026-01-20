@@ -27,6 +27,9 @@ const turnEl = document.getElementById('turn');
 const roundEl = document.getElementById('round');
 const placementArea = document.getElementById('placement-area');
 const poolEl = document.getElementById('pool');
+const chatLeft = document.getElementById('chatLeft');
+const chatRight = document.getElementById('chatRight');
+
 
 /* ---------- GAME DATA ---------- */
 const images = [
@@ -50,6 +53,15 @@ const show = s => {
     [cover,home,game].forEach(x=>x.classList.remove('active'));
     s.classList.add('active');
 };
+function updateChat(playerIndex, correctCount, wrong) {
+    const box = playerIndex === 0 ? chatLeft : chatRight;
+    if (wrong) {
+        box.textContent = `${players[playerIndex]} placed a wrong emoji ❌`;
+    } else {
+        box.textContent = `${players[playerIndex]} correct placements: ${correctCount} ✅`;
+    }
+}
+
 
 /* ---------- MENU ---------- */
 menuBtn.onclick = () => menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
@@ -170,39 +182,48 @@ placementArea.onclick = e => {
 
 /* ---------- SUBMIT ---------- */
 submitBtn.onclick = () => {
-    let wrong=false;
+    let wrong = false;
+    let correctCount = 0;
 
-    placement.forEach((img,i)=>{
-        if(img===hidden[i]){
-            if(!locked[i]){
-                scores[currentPlayer]+=10;
-                locked[i]=true;
+    placement.forEach((img, i) => {
+        if (img === hidden[i]) {
+            if (!locked[i]) {
+                scores[currentPlayer] += 10;
+                locked[i] = true;
+                correctCount++;
             }
-        } else if(img){
+        } else if (img) {
             pool.push(img);
-            placement[i]=null;
-            wrong=true;
+            placement[i] = null;
+            wrong = true;
         }
     });
 
-    if(wrong) currentPlayer = (currentPlayer+1)%2;
+    updateChat(currentPlayer, correctCount, wrong);
 
-    if(mode==='single' && currentPlayer===1){
-        aiThinking=true;
+    if (wrong) currentPlayer = (currentPlayer + 1) % 2;
+
+    if (mode === 'single' && currentPlayer === 1) {
+        aiThinking = true;
         render();
-        setTimeout(aiTurn,1500);
+        setTimeout(aiTurn, 1500);
         return;
     }
 
-    if(locked.every(Boolean)){
+    if (locked.every(Boolean)) {
         round++;
-        if(round>3){ alert('Game Over'); location.reload(); }
-        else initRound();
+        if (round > 3) {
+            alert('Game Over');
+            location.reload();
+        } else {
+            initRound();
+        }
         return;
     }
 
     render();
 };
+
 
 /* ---------- AI TURN ---------- */
 function aiTurn(){
@@ -230,6 +251,8 @@ function aiTurn(){
             placement[i]=null;
         }
     });
+    updateChat(1, locked.filter(Boolean).length, false);
+
 
     currentPlayer=0;
     aiThinking=false;
