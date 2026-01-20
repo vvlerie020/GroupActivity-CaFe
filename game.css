@@ -70,7 +70,6 @@ button {
     justify-content: space-around;
     width: 80%;
     margin-bottom: 15px;
-    
 }
 
 .roundBox {
@@ -80,7 +79,6 @@ button {
     font-weight: bold;
     min-width: 120px;
     text-align: center;
-    
 }
 
 /* GAME LAYOUT */
@@ -184,41 +182,6 @@ button {
     background-position: center;
     background-repeat: no-repeat;
 }
-/* CHAT BOXES */
-.chatbox {
-    position: fixed;
-    top: 60%;
-    transform: translateY(-50%);
-    width: 180px;
-    min-height: 80px;
-    padding-top: 20px;
-    padding-left: 20px;
-    padding-right: 20px;
-    border-radius: 15px;
-    background-color: rgba(255, 255, 255, 0.85);
-    font-size: 14px;
-    font-weight: bold;
-    text-align: center;
-    
-    pointer-events: none;
-   
-}
-
-#chatLeft {
-    left: 100px;
-}
-
-#chatRight {
-    right: 100px;
-}
-
-/* Mobile */
-@media (max-width: 768px) {
-    .chatbox {
-        width: 140px;
-        font-size: 12px;
-    }
-}
 
 /* PLAY BUTTON */
 #playBtn {
@@ -268,50 +231,28 @@ button {
         margin-top: 60vh;
     }
 }
-/* MOBILE CHAT FIX */
 @media (max-width: 768px) {
 
-    /* Wrapper behavior */
-    #chatLeft,
-    #chatRight {
-        position: relative;        /* remove fixed */
-        top: auto;
-        left: auto;
-        right: auto;
-        transform: none;
-
-        width: 90%;
-        max-width: 300px;
-        margin: 10px auto;         /* center */
-        font-size: 13px;
-        pointer-events: none;
-    }
-
-    /* Push chat below the pool */
-    #pool {
-        margin-bottom: 20px;
-    }
-}
-@media (max-width: 768px) {
-
-    /* stop centering the whole game section */
+    /* stop vertical centering */
     #game {
         justify-content: flex-start;
         padding-top: 20px;
     }
 
-    /* chatboxes under the pool */
+    /* normal document flow */
     #chatLeft,
     #chatRight {
-        position: relative;
+        position: static;      /* KEY FIX */
         transform: none;
         width: 90%;
         max-width: 320px;
         margin: 10px auto;
         font-size: 13px;
+        pointer-events: none;
     }
 
-    #pool {
+    /* spacing after submit button */
+    #submitBtn {
         margin-bottom: 20px;
     }
 }
