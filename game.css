@@ -268,3 +268,27 @@ button {
         margin-top: 60vh;
     }
 }
+/* MOBILE CHAT FIX */
+@media (max-width: 768px) {
+
+    /* Wrapper behavior */
+    #chatLeft,
+    #chatRight {
+        position: relative;        /* remove fixed */
+        top: auto;
+        left: auto;
+        right: auto;
+        transform: none;
+
+        width: 90%;
+        max-width: 300px;
+        margin: 10px auto;         /* center */
+        font-size: 13px;
+        pointer-events: none;
+    }
+
+    /* Push chat below the pool */
+    #pool {
+        margin-bottom: 20px;
+    }
+}
