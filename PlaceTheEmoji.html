@@ -198,7 +198,7 @@ button {
 
 /* PLAY BUTTON */
 #playBtn {
-    margin-top: 30%;
+    margin-top: 50%;
     border-radius: 20px;
 } /*for mobile*/
 @media (max-width: 768px) {
@@ -218,31 +218,31 @@ button {
     #placement-area {
         flex-wrap: wrap;
         justify-content: center;
+        margin-bottom: 20px; /* add extra spacing below slots */
     }
 
     .slot {
         width: 60px;
         height: 60px;
+        margin-top: 5px; /* instead of -40px */
     }
 
     .image-piece {
         width: 55px;
         height: 55px;
+        margin-top: 5px; /* instead of -40px */
     }
 
     #pool {
         width: 100%;
+        margin-bottom: 30px; /* spacing below emoji pool */
     }
 
     #submitBtn {
         width: 90%;
         max-width: 300px;
     }
-    #leftChat, #chatRight {
-        width: 90%;
-        max-width: 300px;
-        font-size: 12px;
-    }
+    
 }
 @media (max-width: 768px) {
     #playBtn {
@@ -253,7 +253,7 @@ button {
 </head>
 
 <body>
-<audio autoplay src="game-music-loop-7-145285.mp3">
+<audio autoplay loop src="game-music-loop-7-145285.mp3">
   Your browser does not support the audio element.
 </audio>
 <button id="menuBtn" style="background-color: rgba(255, 255, 255, 0.432); border-radius: 20px;">☰ Menu</button>
