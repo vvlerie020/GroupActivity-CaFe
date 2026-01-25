@@ -202,6 +202,10 @@ button {
     border-radius: 20px;
 } /*for mobile*/
 @media (max-width: 768px) {
+    body, html {
+height: 100%;
+overflow-y: auto; /* allow scrolling */
+}
 
     #scoresContainer,
     #turnRoundContainer {
@@ -219,38 +223,46 @@ button {
     #placement-area {
         flex-wrap: wrap;
         justify-content: center;
-        margin-bottom: 20px; /* add extra spacing below slots */
+        margin: 10px auto 20px auto; /* spacing above and below */
     }
 
-    .slot {
-        width: 60px;
-        height: 60px;
-        margin-top: 5px; /* instead of -40px */
-    }
+    
+
+.slot {
+width: 60px;
+height: 60px;
+margin: 5px; /* standard spacing between slots */
+margin-top: 5px; /* no negative margin */
+}
 
     .image-piece {
         width: 55px;
         height: 55px;
+        margin: 5px;
         margin-top: 5px; /* instead of -40px */
     }
 
     #pool {
         width: 100%;
-        margin-bottom: 20px; /* spacing below emoji pool */
-    }
+display: flex;
+flex-wrap: wrap;
+justify-content: center;
+margin-bottom: 30px; /* space before submit button */
+}
 
     #submitBtn {
-        width: 80%;
-        max-width: 300px;
-        
-    }
+width: 80%;
+max-width: 300px;
+margin: 20px auto 40px auto; /* spacing from pool and bottom */
+display: block;
+}
     
+
+#playBtn {
+margin-top: 70vh;
 }
-@media (max-width: 768px) {
-    #playBtn {
-        margin-top: 70vh;
-    }
 }
+
 </style>
 </head>
 
