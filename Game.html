@@ -1,16 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Place The Emoji</title>
     <link rel="icon" type="image/x-icon" href="pics/cover.jpg">
-
     <style>
+        /* ---------- GENERAL STYLES ---------- */
         body {
             margin: 0;
             font-family: Arial, sans-serif;
             overflow-x: hidden;
+        }
+
+        button {
+            padding: 10px 20px;
+            margin: 8px;
+            cursor: pointer;
         }
 
         /* ---------- MENU ---------- */
@@ -19,6 +26,8 @@
             top: 10px;
             left: 10px;
             z-index: 1000;
+            background-color: rgba(255, 255, 255, 0.432);
+            border-radius: 20px;
         }
 
         #menu {
@@ -52,12 +61,6 @@
 
         section.active {
             display: flex;
-        }
-
-        button {
-            padding: 10px 20px;
-            margin: 8px;
-            cursor: pointer;
         }
 
         /* ---------- SCORES & TURN ---------- */
@@ -98,9 +101,10 @@
 
         /* ---------- GAME LAYOUT ---------- */
         #placement-area {
-            display: flex;
-            margin: 15px;
-        }
+display: flex;
+margin: 15px;
+padding-top: 40px; /* instead of negative margin */
+}
 
         .slot {
             width: 80px;
@@ -109,7 +113,7 @@
             margin: 5px;
             background: white;
             cursor: pointer;
-            margin-top: -40px;
+          
         }
 
         .slot.locked {
@@ -117,18 +121,19 @@
             cursor: default;
         }
 
-        #pool {
-            display: flex;
-            flex-wrap: wrap;
-            width: 80%;
-            justify-content: center;
-        }
+       #pool {
+display: flex;
+flex-wrap: wrap;
+width: 80%;
+justify-content: center;
+padding-top: 40px; /* replaces negative margin */
+}
 
         .image-piece {
             width: 70px;
             height: 70px;
             margin: 5px;
-            margin-top: -40px;
+           
             border: 1px solid #aaa;
             cursor: pointer;
         }
@@ -202,12 +207,16 @@
 
         /* ---------- PLAY BUTTON ---------- */
         #playBtn {
-            margin-top: 50%;
+            margin-top: 30%;
             border-radius: 20px;
+            background-color: rgba(221, 160, 221, 0.495);
+            font-size: 30px;
+            border-radius: 50px;
         }
 
-        /* ---------- MOBILE ---------- */
+        /* ---------- MEDIA QUERIES ---------- */
         @media (max-width: 768px) {
+
             #scoresContainer,
             #turnRoundContainer {
                 width: 95%;
@@ -223,29 +232,32 @@
             #placement-area {
                 flex-wrap: wrap;
                 justify-content: center;
-                margin-bottom: 20px;
             }
 
             .slot {
                 width: 60px;
                 height: 60px;
-                margin-top: 5px;
             }
 
             .image-piece {
                 width: 55px;
                 height: 55px;
-                margin-top: 5px;
             }
 
             #pool {
                 width: 100%;
-                margin-bottom: 30px;
             }
 
             #submitBtn {
                 width: 90%;
                 max-width: 300px;
+            }
+
+            #leftChat,
+            #chatRight {
+                width: 90%;
+                max-width: 300px;
+                font-size: 12px;
             }
 
             #playBtn {
@@ -257,69 +269,324 @@
 
 <body>
 
-    <audio autoplay loop src="game-music-loop-7-145285.mp3">
-        Your browser does not support the audio element.
-    </audio>
-
-    <button id="menuBtn" style="background-color: rgba(255, 255, 255, 0.432); border-radius: 20px;">
-        ☰ Menu
-    </button>
-
+    <!-- ---------- MENU ---------- -->
+    <button id="menuBtn">☰ Menu</button>
     <div id="menu">
         <button id="howBtn">How to Play</button>
         <button id="aboutBtn">About</button>
     </div>
 
-    <!-- COVER PAGE -->
+    <!-- ---------- COVER PAGE ---------- -->
     <section id="cover" class="active">
-        <button id="playBtn"
-            style="font-size: 30px; border-radius: 50px; margin-top: 30%; background-color: rgba(221, 160, 221, 0.495);">
-            Play
-        </button>
+        <button id="playBtn">Play</button>
     </section>
 
-    <!-- MODE PAGE -->
+    <!-- ---------- MODE / NAME PAGE ---------- -->
     <section id="home">
         <div class="home-box">
-            <h1 id="homeTitle" style="color: #241e1e;">Select Mode</h1>
+            <h1 id="homeTitle">Select Mode</h1>
 
             <div id="modeButtons">
-                <button id="singleBtn" style="background-color: rgba(221, 160, 221, 0.354);">
-                    Single Player
-                </button>
-                <button id="multiBtn" style="background-color: rgba(221, 160, 221, 0.354);">
-                    Multiplayer
-                </button>
+                <button id="singleBtn">Single Player</button>
+                <button id="multiBtn">Multiplayer</button>
             </div>
 
             <div id="registration" style="display:none;">
                 <input id="p1Input" placeholder="Player 1 Name">
                 <input id="p2Input" placeholder="Player 2 Name">
-                <button id="startBtn" style="background-color: rgba(221, 160, 221, 0.354);">
-                    Start Game
-                </button>
+                <button id="startBtn">Start Game</button>
             </div>
         </div>
     </section>
 
-    <!-- GAME PAGE -->
+    <!-- ---------- GAME PAGE ---------- -->
     <section id="game">
+
+        <!-- Scores -->
         <div id="scoresContainer">
-            <div class="scoreBox" id="p1Score" style="margin-right: 500px;"></div>
+            <div class="scoreBox" id="p1Score"></div>
             <div class="scoreBox" id="p2Score"></div>
         </div>
 
+        <!-- Round, Turn, Correct -->
         <div id="turnRoundContainer">
             <div class="roundBox" id="round"></div>
             <div class="roundBox" id="turn"></div>
             <div class="roundBox" id="correct"></div>
         </div>
 
-        <div id="placement-area" style="margin-top: 50px;"></div>
-        <div id="pool" style="margin-top: 50px;"></div>
+        <!-- Game Slots & Pool -->
+        <div id="placement-area"></div>
+        <div id="pool"></div>
 
-        <button id="submitBtn"
-            style="border-radius: 20px; background-color: rgba(221, 160, 221, 0.354); margin-top: 50px;">
-            Submit Guess
-        </button>
+        <!-- Submit -->
+        <button id="submitBtn">Submit Guess</button>
+
     </section>
+
+    <!-- ---------- JAVASCRIPT ---------- -->
+    <script>
+        // ---------- DOM ELEMENTS ----------
+        const cover = document.getElementById('cover');
+        const home = document.getElementById('home');
+        const game = document.getElementById('game');
+
+        const playBtn = document.getElementById('playBtn');
+        const singleBtn = document.getElementById('singleBtn');
+        const multiBtn = document.getElementById('multiBtn');
+        const startBtn = document.getElementById('startBtn');
+        const submitBtn = document.getElementById('submitBtn');
+
+        const menuBtn = document.getElementById('menuBtn');
+        const menu = document.getElementById('menu');
+        const howBtn = document.getElementById('howBtn');
+        const aboutBtn = document.getElementById('aboutBtn');
+
+        const homeTitle = document.getElementById('homeTitle');
+        const modeButtons = document.getElementById('modeButtons');
+        const registration = document.getElementById('registration');
+        const p1Input = document.getElementById('p1Input');
+        const p2Input = document.getElementById('p2Input');
+
+        const p1Score = document.getElementById('p1Score');
+        const p2Score = document.getElementById('p2Score');
+        const turnEl = document.getElementById('turn');
+        const roundEl = document.getElementById('round');
+        const placementArea = document.getElementById('placement-area');
+        const poolEl = document.getElementById('pool');
+        const correct = document.getElementById('correct');
+
+        // ---------- GAME DATA ----------
+        const images = [
+            'pics/bigteeth.jpg','pics/chinpoint.jpg','pics/flirty.jpg',
+            'pics/floewerteeth.jpg','pics/gahaman.jpg','pics/happy.jpg',
+            'pics/inlove.jpg','pics/pacute.jpg','pics/shhkindat.jpg','pics/thinking.jpg'
+        ];
+
+        let players = [];
+        let scores = [0, 0];
+        let currentPlayer = 0;
+        let round = 1;
+        let mode = '';
+        let hidden = [], pool = [], placement = [], locked = [];
+        let selectedImage = null;
+        let aiThinking = false;
+
+        // ---------- HELPERS ----------
+        const shuffle = a => a.sort(() => Math.random() - 0.5);
+        const show = s => {
+            [cover, home, game].forEach(x => x.classList.remove('active'));
+            s.classList.add('active');
+        };
+
+        // ---------- MENU ----------
+        menuBtn.onclick = () => menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+        howBtn.onclick = () => alert('Instructions...');
+        aboutBtn.onclick = () => alert('About info...');
+
+        // ---------- GAME FLOW ----------
+        playBtn.onclick = () => show(home);
+
+        singleBtn.onclick = () => {
+            mode = 'single';
+            homeTitle.textContent = 'Enter Name';
+            modeButtons.style.display = 'none';
+            registration.style.display = 'block';
+            p2Input.style.display = 'none';
+        };
+
+        multiBtn.onclick = () => {
+            mode = 'multi';
+            homeTitle.textContent = 'Enter Names';
+            modeButtons.style.display = 'none';
+            registration.style.display = 'block';
+            p2Input.style.display = 'block';
+        };
+
+        startBtn.onclick = () => {
+            if (!p1Input.value.trim()) { alert("Player 1 name is required!"); return; }
+            if (mode === 'multi' && !p2Input.value.trim()) { alert("Player 2 name is required!"); return; }
+
+            players = [
+                p1Input.value.trim(),
+                mode === 'single' ? 'Computer' : p2Input.value.trim()
+            ];
+
+            show(game);
+            initRound();
+        };
+
+        /* ---------- ROUND & RENDER ---------- */
+        function initRound() {
+            const slots = round === 1 ? 4 : round === 2 ? 6 : 8;
+            shuffle(images);
+            hidden = images.slice(0, slots);
+            pool = [...hidden, ...images.slice(slots, slots + 2)];
+            shuffle(pool);
+            placement = Array(slots).fill(null);
+            locked = Array(slots).fill(false);
+            currentPlayer = 0;
+            aiThinking = false;
+            render();
+        }
+
+        function render() {
+            p1Score.textContent = `${players[0]}: ${scores[0]}`;
+            p2Score.textContent = `${players[1]}: ${scores[1]}`;
+            turnEl.textContent = `${players[currentPlayer]}'s turn`;
+            roundEl.textContent = `Round ${round}`;
+
+            placementArea.innerHTML = '';
+            placement.forEach((img, i) => {
+                const s = document.createElement('div');
+                s.className = 'slot' + (locked[i] ? ' locked' : '');
+                s.dataset.index = i;
+                if (img) s.innerHTML = `<img src="${img}">`;
+                placementArea.appendChild(s);
+            });
+
+            poolEl.innerHTML = '';
+            pool.forEach(img => {
+                const p = document.createElement('div');
+                p.className = 'image-piece';
+                p.dataset.img = img;
+                p.innerHTML = `<img src="${img}">`;
+                poolEl.appendChild(p);
+            });
+
+            submitBtn.disabled = aiThinking;
+        }
+
+        /* ---------- PLAYER INPUT ---------- */
+        poolEl.onclick = e => {
+            if (aiThinking) return;
+            const p = e.target.closest('.image-piece');
+            if (!p) return;
+            document.querySelectorAll('.image-piece').forEach(x => x.classList.remove('selected'));
+            p.classList.add('selected');
+            selectedImage = p.dataset.img;
+        };
+
+        placementArea.onclick = e => {
+            if (aiThinking) return;
+            const s = e.target.closest('.slot');
+            if (!s) return;
+            const i = +s.dataset.index;
+            if (locked[i]) return;
+
+            if (placement[i]) {
+                pool.push(placement[i]);
+                placement[i] = null;
+            } else if (selectedImage) {
+                placement[i] = selectedImage;
+                pool.splice(pool.indexOf(selectedImage), 1);
+                selectedImage = null;
+            }
+            render();
+        };
+
+        /* ---------- SUBMIT & TURN ---------- */
+        submitBtn.onclick = () => {
+            let wrong = false;
+            let newlyCorrect = 0;
+            const currentName = players[currentPlayer];
+
+            placement.forEach((img, i) => {
+                if (img === hidden[i]) {
+                    if (!locked[i]) {
+                        scores[currentPlayer] += 10;
+                        locked[i] = true;
+                        newlyCorrect++;
+                    }
+                } else if (img) {
+                    pool.push(img);
+                    placement[i] = null;
+                    wrong = true;
+                }
+            });
+
+            correct.textContent = `${currentName} got ${newlyCorrect} correct!`;
+
+            if (wrong) currentPlayer = (currentPlayer + 1) % 2;
+
+            setTimeout(() => {
+                correct.textContent = '';
+                if (mode === 'single' && currentPlayer === 1) {
+                    aiThinking = true;
+                    render();
+                    setTimeout(aiTurn, 1500);
+                    return;
+                }
+
+                if (locked.every(Boolean)) {
+                    round++;
+                    if (round > 3) {
+                        alert('Game Over');
+                        location.reload();
+                    } else {
+                        initRound();
+                    }
+                    return;
+                }
+
+                render();
+            }, 1000);
+        };
+
+        /* ---------- AI TURN ---------- */
+        function aiTurn() {
+            let newlyCorrect = 0;
+            const currentName = players[currentPlayer];
+
+            placement.forEach((img, i) => {
+                if (img === null && !locked[i]) {
+                    let choice;
+                    if (pool.includes(hidden[i]) && Math.random() < 0.1) {
+                        choice = hidden[i];
+                    } else {
+                        choice = pool[Math.floor(Math.random() * pool.length)];
+                    }
+                    placement[i] = choice;
+                    pool.splice(pool.indexOf(choice), 1);
+                }
+            });
+
+            placement.forEach((img, i) => {
+                if (img === hidden[i]) {
+                    if (!locked[i]) {
+                        scores[currentPlayer] += 10;
+                        locked[i] = true;
+                        newlyCorrect++;
+                    }
+                } else if (img) {
+                    pool.push(img);
+                    placement[i] = null;
+                }
+            });
+
+            correct.textContent = `${currentName} got ${newlyCorrect} correct!`;
+
+            setTimeout(() => {
+                correct.textContent = '';
+                currentPlayer = 0;
+                aiThinking = false;
+
+                if (locked.every(Boolean)) {
+                    round++;
+                    if (round > 3) {
+                        alert('Game Over');
+                        location.reload();
+                    } else {
+                        initRound();
+                    }
+                    return;
+                }
+
+                render();
+            }, 1000);
+        }
+    </script>
+
+</body>
+
+</html>
