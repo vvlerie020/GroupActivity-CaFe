@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Place The Emoji</title>
-<link rel="icon" type="image/x-icon" href="pics/cover.jpg">
-<style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Place The Emoji</title>
+    <link rel="icon" type="image/x-icon" href="pics/cover.jpg">
+    <style>
 body {
     margin: 0;
     font-family: Arial, sans-serif;
@@ -48,7 +48,9 @@ section {
     flex-direction: column;
 }
 
-section.active { display: flex; }
+section.active { 
+    display: flex;
+}
 
 button {
     padding: 10px 20px;
@@ -58,39 +60,38 @@ button {
 
 /* SCORES AND TURN BOXES */
 #scoresContainer {
-    display: flex;
-    justify-content: space-around;
-    width: 80%;
-    margin-bottom: 10px;
+display: flex;
+justify-content: space-between;
+width: 90%;
+margin: 15px auto 10px auto; /* center horizontally, spacing top & bottom */
+flex-wrap: wrap; /* allow wrapping on small screens */
 }
 
 .scoreBox {
-    margin-top: 30px;
-    padding: 15px 20px;
-    border-radius: 20px;
-    background-color: rgba(255,255,255,0.8);
-    font-weight: bold;
-    min-width: 120px;
-    text-align: center;
+flex: 1 1 45%; /* each score box takes ~45% of width */
+min-width: 120px;
+margin: 5px; /* spacing between boxes */
 }
 
 #turnRoundContainer {
-    display: flex;
-    flex-direction: column;      /* stack vertically */
-    align-items: center;         /* center horizontally */
-    width: 100%;
-    margin-bottom: 15px;
-    gap: 10px;                   /* space between round & turn */
+display: flex;
+flex-direction: column; /* stack vertically */
+align-items: center;
+width: 90%;
+margin: 10px auto; /* spacing from scores and top */
+gap: 10px;
 }
 
+
+
 .roundBox {
-    padding: 10px 15px;
-    border-radius: 15px;
-    background-color: rgba(255,255,255,0.8);
-    font-weight: bold;
-    min-width: 120px;
-    text-align: center;
-}
+padding: 10px 15px;
+border-radius: 15px;
+background-color: rgba(255,255,255,0.8);
+font-weight: bold;
+min-width: 120px;
+text-align: center;
+}   
 
 /* GAME LAYOUT */
 #placement-area {
@@ -220,99 +221,99 @@ overflow-y: auto; /* allow scrolling */
         margin: 0 !important;
     }
 
-    #placement-area {
-        flex-wrap: wrap;
-        justify-content: center;
-        margin: 10px auto 20px auto; /* spacing above and below */
-    }
+   
+
+#placement-area {
+flex-wrap: wrap;
+justify-content: center;
+margin: 10px auto 20px auto;
+}
 
     
 
-.slot {
+.slot, .image-piece {
+margin: 5px;
+margin-top: 5px; /* remove negative margins */
 width: 60px;
 height: 60px;
-margin: 5px; /* standard spacing between slots */
-margin-top: 5px; /* no negative margin */
 }
 
-    .image-piece {
-        width: 55px;
-        height: 55px;
-        margin: 5px;
-        margin-top: 5px; /* instead of -40px */
-    }
+    
 
-    #pool {
-        width: 100%;
+#pool {
+width: 100%;
+margin-bottom: 30px;
 display: flex;
 flex-wrap: wrap;
 justify-content: center;
-margin-bottom: 30px; /* space before submit button */
 }
 
-    #submitBtn {
+   #submitBtn {
 width: 80%;
 max-width: 300px;
-margin: 20px auto 40px auto; /* spacing from pool and bottom */
+margin: 20px auto 40px auto;
 display: block;
+}
 }
     
 
 #playBtn {
 margin-top: 70vh;
 }
-}
+
 
 </style>
 </head>
 
 <body>
-<audio autoplay loop src="game-music-loop-7-145285.mp3">
-  Your browser does not support the audio element.
-</audio>
-<button id="menuBtn" style="background-color: rgba(255, 255, 255, 0.432); border-radius: 20px;">☰ Menu</button>
-<div id="menu">
-    <button id="howBtn">How to Play</button>
-    <button id="aboutBtn">About</button>
-   
-</div>
 
-<!-- COVER PAGE -->
-<section id="cover" class="active">
-    <button id="playBtn" style="font-size: 30px; border-radius: 50px; margin-top: 30%;
-    background-color: rgba(221, 160, 221, 0.495);">Play</button>
-</section>
-
-<!-- MODE / ENTER NAME PAGE -->
-<section id="home">
-    <div class="home-box">
-    <h1 id="homeTitle" style="color: #241e1e;">Select Mode</h1>
-
-    <div id="modeButtons">
-        <button id="singleBtn" style="background-color: rgba(221, 160, 221, 0.354);">Single Player</button>
-        <button id="multiBtn" style="background-color: rgba(221, 160, 221, 0.354); ">Multiplayer</button>
+    <audio autoplay loop src="game-music-loop-7-145285.mp3">
+    Your browser does not support the audio element.
+    </audio>
+    <button id="menuBtn" style="background-color: rgba(255, 255, 255, 0.432); border-radius: 20px;">☰ Menu</button>
+    <div id="menu">
+        <button id="howBtn">How to Play</button>
+        <button id="aboutBtn">About</button>
     </div>
 
-    <div id="registration" style="display:none;">
-        <input id="p1Input" placeholder="Player 1 Name">
-        <input id="p2Input" placeholder="Player 2 Name">
-        <button id="startBtn" style="background-color: rgba(221, 160, 221, 0.354); ">Start Game</button>
-    </div>
-    </div>
-</section>
+    <!-- COVER PAGE -->
+    <section id="cover" class="active">
+        <button id="playBtn" style="font-size: 30px; border-radius: 50px; margin-top: 30%;
+        background-color: rgba(221, 160, 221, 0.495);">Play</button>
+    </section>
 
-<!-- GAME PAGE -->
-<section id="game">
-    <div id="scoresContainer">
-        <div class="scoreBox" id="p1Score" style="margin-right: 500px;"></div>
-        <div class="scoreBox" id="p2Score"></div>
-    </div>
+    <!-- MODE / ENTER NAME PAGE -->
+    <section id="home">
+        <div class="home-box">
+        <h1 id="homeTitle" style="color: #241e1e;">Select Mode</h1>
 
-    <div id="turnRoundContainer">
-        <div class="roundBox" id="round" ></div>
-         <div class="roundBox" id="turn"></div>
-         <div class="roundBox" id="correct"></div>
-    </div>
+            <div id="modeButtons">
+                <button id="singleBtn" style="background-color: rgba(221, 160, 221, 0.354);">Single Player</button>
+                <button id="multiBtn" style="background-color: rgba(221, 160, 221, 0.354); ">Multiplayer</button>
+            </div>
+
+            <div id="registration" style="display:none;">
+                <input id="p1Input" placeholder="Player 1 Name">
+                <input id="p2Input" placeholder="Player 2 Name">
+                <button id="startBtn" style="background-color: rgba(221, 160, 221, 0.354); ">Start Game</button>
+             </div>
+         </div>
+    </section>
+
+    <!-- GAME PAGE -->
+    <section id="game">
+
+        <!-- scores -->
+        <div id="scoresContainer">
+            <div class="scoreBox" id="p1Score"></div>
+            <div class="scoreBox" id="p2Score"></div>
+        </div>
+
+         <div id="turnRoundContainer">
+            <div class="roundBox" id="round" ></div>
+            <div class="roundBox" id="turn"></div>
+            <div class="roundBox" id="correct"></div>
+        </div>
 
     <div id="placement-area" style="margin-top: 50px;"></div>
     <div id="pool" style="margin-top: 50px;"></div>
